@@ -1,14 +1,14 @@
-﻿# Login_Template
+# React + Node boiler-plate
 
-할 것 정리
-
-1. 날씨, 지도, 인스타그램 등 API 실습
-2. React 강의 듣기
-3. velog 업로드
-
-프로젝트 아이디어
-
-1. 사진 업로드시 컵을 식별하고 입력한 값에 맞게 계량
-2. 자낳대 경매 시스템 클론 코딩
-3. 사운드 클라우드 클론 코딩
-4. 쇼핑몰 클론 코딩
+1. 할 것 정리
+  a. 로그인시 loginInfo로 리다이렉트 시키기
+  b. 회원가입 성공시 LandingPage로 이동
+  c. 회원가입 주소 api 적용
+  d. 로그아웃
+  e. 게시판
+  f. 검색 필터
+  g. 파일 업로드
+  h. 파일 다운로드
+  i. React socket.io 알아보기
+  j. Navbar 적용 방법
+  k. css
