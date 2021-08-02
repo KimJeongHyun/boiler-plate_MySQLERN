@@ -3,6 +3,7 @@ import {
     LOGIN_USER,
     REGISTER_USER
 } from './types';
+
 export function loginUser(dataToSubmit){
     const request=axios.post('/api/loginUser',dataToSubmit)
     .then(response=>response.data);
