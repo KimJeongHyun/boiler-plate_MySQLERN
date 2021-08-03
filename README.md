@@ -1,14 +1,11 @@
 # React + Node boiler-plate
 
-1. 할 것 정리
-  a. 로그인시 loginInfo로 리다이렉트 시키기
-  b. 회원가입 성공시 LandingPage로 이동
-  c. 회원가입 주소 api 적용
-  d. 로그아웃
-  e. 게시판
-  f. 검색 필터
-  g. 파일 업로드
-  h. 파일 다운로드
-  i. React socket.io 알아보기
-  j. Navbar 적용 방법
-  k. css
+1. 현재 Id type 확인해서 Navbar 표시 바꾸기
+2. 로그인시 loginInfo로 리다이렉트 
+3. 회원가입 주소 api 적용 -> OK
+4. 로그아웃 버튼
+5. 게시판 -> OK -> 각 post 렌더링 필요
+6. 검색 필터
+7. 파일 업로드
+8. 파일 다운로드
+9. react socket io
