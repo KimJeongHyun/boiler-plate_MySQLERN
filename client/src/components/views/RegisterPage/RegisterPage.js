@@ -2,10 +2,12 @@ import axios from 'axios';
 import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {registerUser} from '../../../_actions/user_action'
+import PopupDom from './PopupDom';
+import PopupContent from './PopupContent';
 
 function RegisterPage() {
     const dispatch = useDispatch();
-
+    
     const [Id, setId] = useState("")
     const [Password, setPassword] = useState("")
     const [Password2, setPassword2] = useState("")
@@ -15,6 +17,13 @@ function RegisterPage() {
     const [Mail, setMail] = useState("")
     const [Phone, setPhone] = useState("")
     const [Address, setAddress] = useState("")
+    const [SubAddress,setSubAddress] = useState("")
+    const [childWindow,setChildWindow] = useState(false);
+
+    const openDiv = (event) =>{
+        setChildWindow(true);
+        document.getElementById('post_content').removeAttribute('hidden');
+    }
 
     const onIdHandler = (event) =>{
         setId(event.currentTarget.value);
@@ -48,7 +57,10 @@ function RegisterPage() {
     const onAddressHandler = (event) =>{
         setAddress(event.currentTarget.value);
     }
-    
+
+    const onSubAddressHandler = (event) =>{
+        setAddress(event.currentTarget.value);
+    }
 
 
     const onSubmitHandler = (event) =>{
@@ -62,7 +74,8 @@ function RegisterPage() {
             birth:Birth,
             mail:Mail,
             phone:Phone,
-            address:Address
+            address:Address,
+            subaddress:SubAddress
 
         }
         dispatch(registerUser(body))
@@ -72,7 +85,7 @@ function RegisterPage() {
     return (
         <div style={{
             display:'flex',justifyContent:'center',alignItems: 'center',
-            width:'100%',height:'100vh'
+            width:'100%',height:'150vh', minHeight:'100px'
         }}>
             <form style={{display:'flex', flexDirection:'column'}}
                 onSubmit={onSubmitHandler}
@@ -94,12 +107,19 @@ function RegisterPage() {
                 <label>핸드폰</label>
                 <input type="text" value={Phone} onChange={onPhoneHandler} />
                 <label>주소</label>
-                <input type="text" value={Address} onChange={onAddressHandler} />
+                <input type="text" value={Address} readOnly/>
+                <span id='popupDom' onClick={openDiv}>주소 찾기</span>
+                    <div id='post_content' hidden>
+                        {childWindow && <PopupDom><PopupContent setAddress={setAddress}/></PopupDom>}
+                    </div>
+                <label>추가 주소</label>
+                <input type="text" value={SubAddress} onChange={onSubAddressHandler}/>
                 <br />
                 <button>
                     RegisterPage
                 </button>
             </form>
+            
         </div>
     )
 }
