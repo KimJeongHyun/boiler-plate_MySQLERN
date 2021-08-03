@@ -24,6 +24,9 @@ function RegisterPage() {
         setChildWindow(true);
         document.getElementById('post_content').removeAttribute('hidden');
     }
+    const closeDiv = (event) =>{
+        setChildWindow(false);
+    }
 
     const onIdHandler = (event) =>{
         setId(event.currentTarget.value);
@@ -52,10 +55,6 @@ function RegisterPage() {
     }
     const onPhoneHandler = (event) =>{
         setPhone(event.currentTarget.value);
-    }
-
-    const onAddressHandler = (event) =>{
-        setAddress(event.currentTarget.value);
     }
 
     const onSubAddressHandler = (event) =>{
@@ -110,7 +109,7 @@ function RegisterPage() {
                 <input type="text" value={Address} readOnly/>
                 <span id='popupDom' onClick={openDiv}>주소 찾기</span>
                     <div id='post_content' hidden>
-                        {childWindow && <PopupDom><PopupContent setAddress={setAddress}/></PopupDom>}
+                        {childWindow && <PopupDom><PopupContent setAddress={setAddress} closeDiv={closeDiv}/></PopupDom>}
                     </div>
                 <label>추가 주소</label>
                 <input type="text" value={SubAddress} onChange={onSubAddressHandler}/>

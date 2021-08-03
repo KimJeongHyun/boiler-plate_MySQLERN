@@ -24,6 +24,7 @@ const PopupContent = (props) => {
       setAddress(data.zonecode);
       setAddressDetail(fullAddr);
       props.setAddress(fullAddr);
+      props.closeDiv();
       document.getElementById('post_content').setAttribute('hidden','true');
     };
 
