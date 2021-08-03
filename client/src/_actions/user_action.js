@@ -1,7 +1,8 @@
 import axios from "axios";
 import {
     LOGIN_USER,
-    REGISTER_USER
+    REGISTER_USER,
+    BOARD_VIEW
 } from './types';
 
 export function loginUser(dataToSubmit){
@@ -20,6 +21,16 @@ export function registerUser(dataToSubmit){
 
     return {
         type:REGISTER_USER,
+        payload: request
+    }
+}
+
+export function boardView(){
+    const request=axios.get('/api/board/list/:page')
+    .then(response=>response.data);
+
+    return {
+        type:BOARD_VIEW,
         payload: request
     }
 }

@@ -8,11 +8,11 @@ const fs = require('fs');
 const path = require('path');
 
 router.get('/board/list',function (req,res,next) {
-  res.redirect('/board/list/1')// /board로 접속요청이 들어왔을 때 1페이지로 자동으로 이동하도록 리다이렉트 해줍니다.
+  res.redirect('/register')// /board로 접속요청이 들어왔을 때 1페이지로 자동으로 이동하도록 리다이렉트 해줍니다.
   req.session.refresh = true; // 무한 새로고침으로 조회수 폭증을 막는 세션 값
 })
 
-router.get('/board/list/:page', function(req, res, next) {
+router.get('/api/board/list/:page', function(req, res, next) {
   req.session.refresh = true;
   const page = req.params.page;
   const sql = 'SELECT idx, nick, title, content, hit FROM board ORDER BY idx DESC'; // 페이징 포스트가 최근 작성된 것부터 보이도록 DESC 처리.
@@ -25,9 +25,11 @@ router.get('/board/list/:page', function(req, res, next) {
         const idxInitQuery = connection.query(idxInit,function(err,rows){
           if (err) throw err;
         })
-        res.render('boardHTML/pageEmpty.html',{title:'게시판 리스트',lastidx:1});
+        res.json({title:'게시판 리스트', lastidx:1});
+        //res.render('boardHTML/pageEmpty.html',{title:'게시판 리스트',lastidx:1});
       }else{
-        res.render('boardHTML/page.html',{title:'게시판 리스트',rows:rows, page:page, length:rows.length-1, page_num:10, lastidx:rows[0].idx+1,userName:req.session.displayName});
+        res.json({title:'게시판 리스트', rows:rows, page:page, length:rows.length-1,page_num:10,lastidx:rows[0].idx+1,userName:req.session.displayName});
+        //res.render('boardHTML/page.html',{title:'게시판 리스트',rows:rows, page:page, length:rows.length-1, page_num:10, lastidx:rows[0].idx+1,userName:req.session.displayName});
       }
       connection.release();
     })

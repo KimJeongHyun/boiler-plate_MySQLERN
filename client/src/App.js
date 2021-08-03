@@ -3,12 +3,14 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom"
 
 import LandingPage from './components/views/LandingPage/LandingPage'
 import LoginPage from './components/views/LoginPage/LoginPage'
 import RegisterPage from './components/views/RegisterPage/RegisterPage'
+import Board from './components/views/Board/Board'
 
 
 function App() {
@@ -32,6 +34,12 @@ function App() {
           </Route>
           <Route path="/register">
             <RegisterPage />
+          </Route>
+          <Route path="/board/list/">
+            <Board/>
+          </Route>
+          <Route path="/board/list/:page">
+            <Board/>
           </Route>
         </Switch>
       </div>
