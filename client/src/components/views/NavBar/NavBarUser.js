@@ -26,7 +26,7 @@ export function NavBarUser(){
                         <BiMenuAltLeft id='menuBtn'/>
                     </li>
                     <li className="sideBar-item">
-                        <a href="/info"><BiHomeHeart/><span id='linkName'>Home</span></a>
+                        <a href="/"><BiHomeHeart/><span id='linkName'>Home</span></a>
                         <span id='tooltip'>Home</span>
                     </li>
                     <li className="sideBar-item">
@@ -34,7 +34,7 @@ export function NavBarUser(){
                         <span id='tooltip'>Notice</span>
                     </li>
                     <li className="sideBar-item">
-                        <a href="/board/list"><BiClipboard/><span id='linkName'>Board</span></a>
+                        <a href="/board/list/1"><BiClipboard/><span id='linkName'>Board</span></a>
                         <span id='tooltip'>Board</span>
                     </li>
                     <li className="sideBar-item">

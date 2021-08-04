@@ -1,24 +1,23 @@
 import React,{useState} from 'react'
-import {useLocation} from "react-router";
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
 import '../../../css/style.css'
 import {useDispatch} from 'react-redux'
 import {boardView} from '../../../_actions/user_action'
-import { RiContactsBookUploadLine } from 'react-icons/ri';
 
 function Board(props){
     const [Title, setTitle] = useState("")
     const [Rows, setRows] = useState("")
     const [Pagenum, setPagenum] = useState("")
-    const [Page, setPage] = useState("")
+    const [Page, setPage] = useState(0)
     const [Length, setLength] = useState("")
     const [Lastidx, setLastidx] = useState("")
     const [Session,setSession] = useState("")
 
     const dispatch = useDispatch();
-    dispatch(boardView())
+
+    dispatch(boardView(props.match.params.page))
         .then(response=>{
             const result = response.payload;
             setTitle(result.title);
@@ -29,7 +28,7 @@ function Board(props){
             setLastidx(result.lastidx);
             setSession(result.userName);
         })
-    
+
     const sessionValue = (Session) =>{
         if (typeof Session!=='undefined' || Session==''){
             return true;
@@ -37,24 +36,32 @@ function Board(props){
             return false;
         }
     }
+    
     const postRendering = () =>{
         const result=[];
-        for (let i=0; i<Rows.length; i++){
-            result.push(<tr key={i}>
-                            <td>
-                                {Rows[i].idx}
-                            </td>
-                            <td>
-                                {Rows[i].title}
-                            </td>
-                            <td>
-                                {Rows[i].nick}
-                            </td>
-                        </tr>)
+        if (Page>0){
+            for (let i=(Page*Pagenum)-Pagenum; i<(Page*Pagenum); i++){
+                if (i>Length){
+                    break;
+                }else{
+                    result.push(<tr key={i}>
+                        <td>
+                            {Rows[i].idx}
+                        </td>
+                        <td>
+                            <a href={'/post/'+Rows[i].idx}>{Rows[i].title}</a>
+                        </td>
+                        <td>
+                            {Rows[i].nick}
+                        </td>
+                    </tr>)
+                }
+            }
         }
+        
         return result;
     }
-
+      
     const footerRendering = () =>{
         const result=[];
         for (let i=0; i<Length/Pagenum; i++){
@@ -97,6 +104,8 @@ function Board(props){
                             </tr>
                             </tfoot>
                         </table>
+                        <br/>
+                        <a href={"/write/"+Lastidx} style={{marginTop:"50px"}}><input type="button" value="글 쓰기"/></a>
                     </div>
                 </div>
                 <ScrollTop/>
@@ -105,4 +114,4 @@ function Board(props){
     
 }
 
-export default Board
+export default React.memo(Board)

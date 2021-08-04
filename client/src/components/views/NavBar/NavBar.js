@@ -26,7 +26,7 @@ export function NavBar(){
                         <BiMenuAltLeft id='menuBtn'/>
                     </li>
                     <li className="sideBar-item">
-                        <a href="/info"><BiHomeHeart/><span id='linkName'>Home</span></a>
+                        <a href="/"><BiHomeHeart/><span id='linkName'>Home</span></a>
                         <span id='tooltip'>Home</span>
                     </li>
                     <li className="sideBar-item">
@@ -34,7 +34,7 @@ export function NavBar(){
                         <span id='tooltip'>Notice</span>
                     </li>
                     <li className="sideBar-item">
-                        <a href="/board/list"><BiClipboard/><span id='linkName'>Board</span></a>
+                        <a href="/board/list/1"><BiClipboard/><span id='linkName'>Board</span></a>
                         <span id='tooltip'>Board</span>
                     </li>
                     <li className="sideBar-item">
@@ -43,9 +43,9 @@ export function NavBar(){
                     </li>
                     <div className="guestContainer">
                         <div className="guestContent" id="guestContent">
-                            <a href="/login" id="functionName"><span id='linkName'>Login</span><RiLoginCircleFill id='linkBtn'/></a>
+                            <a href="/login" id="functionName"><RiLoginCircleFill/><span id='linkName'>Login</span></a>
                             <br/>
-                            <a href="/register" id="functionName"><span id='linkName'>Register</span><RiUserAddLine id='linkBtn'/></a>
+                            <a href="/register" id="functionName"><RiUserAddLine/><span id='linkName'>Register</span></a>
                         </div> 
                     </div>         
                 </ul>

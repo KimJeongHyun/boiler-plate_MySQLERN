@@ -4,14 +4,19 @@ import {
   Switch,
   Route,
   Link,
-  Redirect
+  Redirect,
+  HashRouter
 } from "react-router-dom"
 
 import LandingPage from './components/views/LandingPage/LandingPage'
 import LoginPage from './components/views/LoginPage/LoginPage'
+import Logout from './components/views/User/Logout'
 import RegisterPage from './components/views/RegisterPage/RegisterPage'
 import Board from './components/views/Board/Board'
-import Logout from './components/views/User/Logout'
+import Post from './components/views/Board/Post'
+import PostRecom from './components/views/Board/PostRecom'
+import PostRecomDel from './components/views/Board/PostRecomDel'
+
 
 
 function App() {
@@ -36,15 +41,13 @@ function App() {
           <Route path="/register">
             <RegisterPage />
           </Route>
-          <Route path="/board/list/">
-            <Board/>
-          </Route>
-          <Route path="/board/list/:page">
-            <Board/>
-          </Route>
           <Route path="/logout">
             <Logout/>
           </Route>
+          <Route path="/board/list/:page" component={Board}/>
+          <Route path="/post/:page" component={Post}/>
+          <Route path="/recommend/:idx" component={PostRecom}/>
+          <Route path="/recommendDel/:idx" component={PostRecomDel}/>
         </Switch>
       </div>
     </Router>

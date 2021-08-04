@@ -1,5 +1,4 @@
 import React,{useEffect, useState} from 'react'
-import {useLocation} from "react-router";
 import axios from 'axios'
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'

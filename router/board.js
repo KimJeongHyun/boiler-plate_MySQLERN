@@ -13,8 +13,8 @@ router.get('/board/list',function (req,res,next) {
 })
 
 router.get('/api/board/list/:page', function(req, res, next) {
-  req.session.refresh = true;
   const page = req.params.page;
+  req.session.refresh = true;
   const sql = 'SELECT idx, nick, title, content, hit FROM board ORDER BY idx DESC'; // 페이징 포스트가 최근 작성된 것부터 보이도록 DESC 처리.
   conn.getConnection((err,connection)=>{
     if (err) throw err;
@@ -28,7 +28,7 @@ router.get('/api/board/list/:page', function(req, res, next) {
         res.json({title:'게시판 리스트', lastidx:1});
         //res.render('boardHTML/pageEmpty.html',{title:'게시판 리스트',lastidx:1});
       }else{
-        res.json({title:'게시판 리스트', rows:rows, page:page, length:rows.length-1,page_num:10,lastidx:rows[0].idx+1,userName:req.session.displayName});
+        res.json({title:'게시판 리스트', rows:rows, page:1, length:rows.length-1,page_num:10,lastidx:rows[0].idx+1,userName:req.session.displayName});
         //res.render('boardHTML/page.html',{title:'게시판 리스트',rows:rows, page:page, length:rows.length-1, page_num:10, lastidx:rows[0].idx+1,userName:req.session.displayName});
       }
       connection.release();
@@ -36,7 +36,7 @@ router.get('/api/board/list/:page', function(req, res, next) {
   })
 });
 
-router.get('/board/list/post/:page',function(req,res,next){
+router.get('/api/post/:page',function(req,res,next){
   const page = req.params.page;
   conn.getConnection((err,connection)=>{
     if (err) throw err;
@@ -81,47 +81,64 @@ router.get('/board/list/post/:page',function(req,res,next){
         })
       }
 
+      
+
       let sqlWork = function(){
         return new Promise(function(resolve,reject){
-          if (author==req.session.displayName){
-            res.render('boardHTML/postUser.html',{title:rows[0].title, rows:rows, fileName:fileArray,imgPaths:imgFilePath});
-            resolve('client is post user');
-          }else{
-            const recomSelSql = 'SELECT recomPost FROM users WHERE id=?';
-            const recomSelQuery = connection.query(recomSelSql,[req.session.displayName],(err,rows)=>{
-              if (err) throw err;
-              if (rows.length==0 || rows[0].recomPost==null){
-                res.render('boardHTML/postGuest.html',{title:preRows[0].title,rows:preRows,fileName:fileArray,imgPaths:imgFilePath});
-                resolve('client is post guest, recomPost is null.');
-              }else{
-                const recomPosts = rows[0].recomPost;
-                const recomPostsArray = recomPosts.split(';');
-                if (recomPostsArray.includes(page)){
-                  res.render('boardHTML/postGuestRecommended.html',{title:preRows[0].title,rows:preRows,fileName:fileArray,imgPaths:imgFilePath});
-                  resolve('client is recommended user');
+          if (typeof req.session.displayName!=='undefined'){
+            if (author==req.session.displayName){
+              res.json({title:rows[0].title, rows:rows[0], fileName:fileArray,imgPaths:imgFilePath,postLoc:'PostUser'})
+              //res.render('boardHTML/postUser.html',{title:rows[0].title, rows:rows, fileName:fileArray,imgPaths:imgFilePath});
+              resolve('client is post user');
+            }else{
+              const recomSelSql = 'SELECT recomPost FROM users WHERE id=?';
+              const recomSelQuery = connection.query(recomSelSql,[req.session.displayName],(err,rows)=>{
+                if (err) throw err;
+                if (rows.length==0 || rows[0].recomPost==null){
+                  res.json({title:preRows[0].title,rows:preRows[0],fileName:fileArray,imgPaths:imgFilePath,postLoc:'GuestNoRecom'});
+                  //res.render('boardHTML/postGuest.html',{title:preRows[0].title,rows:preRows,fileName:fileArray,imgPaths:imgFilePath});
+                  resolve('client is post guest, recomPost is null.');
                 }else{
-                  res.render('boardHTML/postGuest.html',{title:preRows[0].title,rows:preRows,fileName:fileArray,imgPaths:imgFilePath});
-                  resolve('client is post guest, post is not included in recomPost');
-                }
-              }          
-            })
+                  const recomPosts = rows[0].recomPost;
+                  const recomPostsArray = recomPosts.split(';');
+                  if (recomPostsArray.includes(page)){
+                    res.json({title:preRows[0].title,rows:preRows[0],fileName:fileArray,imgPaths:imgFilePath,postLoc:'GuestRecom'})
+                    //res.render('boardHTML/postGuestRecommended.html',{title:preRows[0].title,rows:preRows,fileName:fileArray,imgPaths:imgFilePath});
+                    resolve('client is recommended user');
+                  }else{
+                    res.json({title:preRows[0].title,rows:preRows[0],fileName:fileArray,imgPaths:imgFilePath,postLoc:'GuestNoRecom'})
+                    //res.render('boardHTML/postGuest.html',{title:preRows[0].title,rows:preRows,fileName:fileArray,imgPaths:imgFilePath});
+                    resolve('client is post guest, post is not included in recomPost');
+                  }
+                }          
+              })
+            }
+          }else{
+            res.json({title:rows[0].title, rows:rows[0], fileName:fileArray,imgPaths:imgFilePath,postLoc:'Guest'})
           }
+        })
+      }
+      
+      let hitWork = function(){
+        return new Promise(function(resolve,reject){
+          if (req.session.refresh==true){
+            const query = connection.query('UPDATE board SET hit=hit+1 WHERE idx='+page, function(err,rows){
+              if (err) reject(err);
+              connection.release();
+            })
+          }else{
+            connection.release();
+          }
+          req.session.refresh=false;
+          resolve('Update hit')
         })
       }
 
       let worker = async function(){
-        console.log(await fileStringWork());
-        console.log(await sqlWork());
-        if (req.session.refresh==true){
-          const query = connection.query('UPDATE board SET hit=hit+1 WHERE idx='+page, function(err,rows){
-            if (err) throw err;
-          })
-        }
-        req.session.refresh=false;
-  
-        connection.release();
+        await fileStringWork();
+        await hitWork();
+        await sqlWork();
       }
-
       worker();
        // 조회수 증가 후에는 새로고침 세션 값을 false로 돌려 post에서 update가 발생하지 않도록 방지한다.
     })
@@ -300,7 +317,7 @@ router.get('/board/delete/:idx',(req,res)=>{
   })
 })
 
-router.get('/recommendDel/:idx',(req,res)=>{
+router.get('/api/recommendDel/:idx',(req,res)=>{
   if (typeof req.session.displayName!=='undefined'){
     const idx = req.params.idx;
     const selSql = 'SELECT recomPost FROM users WHERE id=?';
@@ -329,14 +346,16 @@ router.get('/recommendDel/:idx',(req,res)=>{
         })
         
       })
-      res.send("<script>alert('추천 해제되었습니다.'); document.location.href='/board/list/post/"+idx+"'</script>")
+      res.json({recomDelSuccess:true})
+      //res.send("<script>alert('추천 해제되었습니다.'); document.location.href='/board/list/post/"+idx+"'</script>")
     })
   }else{
-    res.send("<script>alert('비정상적인 접근입니다.'); window.history.back();</script>")
+    res.json({recomDelSuccess:false})
+    //res.send("<script>alert('비정상적인 접근입니다.'); window.history.back();</script>")
   }
 })
 
-router.get('/recommend/:idx',(req,res)=>{
+router.get('/api/recommend/:idx',(req,res)=>{
   if (typeof req.session.displayName!=='undefined'){
     const idx = req.params.idx;
     const selSql = 'SELECT name FROM board WHERE idx=?';
@@ -348,7 +367,8 @@ router.get('/recommend/:idx',(req,res)=>{
       const query = connection.query(selSql,[idx],function(err,rows){
         if (err) throw err;
         if (rows[0].name==req.session.displayName){
-          res.send("<script>alert('자기 자신의 게시글에 추천을 누를 수 없습니다.'); location.reload();</script>");
+          res.json({recomSuccess:false})
+          //res.send("<script>alert('자기 자신의 게시글에 추천을 누를 수 없습니다.'); location.reload();</script>");
         }else{
           const recomSelQuery = connection.query(recomSelSql,[req.session.displayName],(err,rows)=>{
             if (err) throw err;
@@ -356,12 +376,17 @@ router.get('/recommend/:idx',(req,res)=>{
               const recomPostUpdateQuery = connection.query(recomPostUpdateSql,[idx+';',req.session.displayName],(err,rows)=>{
                 if (err) throw err;
               });
-              res.send("<script>document.location.href='/board/list/post/"+idx+"'</script>")
+              const recomUpdateQuery = connection.query(recomUpdateSql,[idx],function(err,rows){
+                if (err) throw err;
+              })
+              res.json({recomSuccess:true})
+              //res.send("<script>document.location.href='/board/list/post/"+idx+"'</script>")
             }else{
               const recomPosts = rows[0].recomPost;
               const recomPostsArray = recomPosts.split(';');
               if (recomPostsArray.includes(idx)){
-                res.send("<script>alert('이미 추천을 누른 게시물입니다.'); window.history.back();</script>");
+                res.json({recomSuccess:false})
+                //res.send("<script>alert('이미 추천을 누른 게시물입니다.'); window.history.back();</script>");
               }else{
                 let recomPostList='';
                 for (let i=0; i<recomPostsArray.length; i++){
@@ -375,7 +400,8 @@ router.get('/recommend/:idx',(req,res)=>{
                 });
                 const recomUpdateQuery = connection.query(recomUpdateSql,[idx],function(err,rows){
                   if (err) throw err;
-                  res.send("<script>document.location.href='/board/list/post/"+idx+"'</script>")
+                  res.json({recomSuccess:true})
+                  //res.send("<script>document.location.href='/board/list/post/"+idx+"'</script>")
                 })
               }
             }
@@ -385,7 +411,8 @@ router.get('/recommend/:idx',(req,res)=>{
       })
     })
   }else{
-    res.send("<script>alert('로그인한 유저만 추천을 누를 수 있습니다.'); window.history.back();</script>")
+    res.json({recomSuccess:false})
+    //res.send("<script>alert('로그인한 유저만 추천을 누를 수 있습니다.'); window.history.back();</script>")
   }
 })
 
