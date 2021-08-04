@@ -75,8 +75,8 @@ app.get('/',(req,res)=>{
     res.render('infoHTML/index.html');
 });
 
-app.get('/api/hello',(req,res)=>{
-    res.send('안녕하세요');
+app.get('/api/getSession',(req,res)=>{
+    res.send(req.session.displayName);
 })
 
 const server = http.createServer(app);

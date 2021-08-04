@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const path = require('path');
 
-router.get('/logout',(req,res)=>{
+router.get('/api/logout',(req,res)=>{
     req.session.destroy();
-    res.render('infoHTML/info.html');
+    res.json({logoutSuccess:true})
 })
 
 module.exports = router;

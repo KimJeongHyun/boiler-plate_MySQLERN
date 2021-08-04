@@ -11,6 +11,7 @@ import LandingPage from './components/views/LandingPage/LandingPage'
 import LoginPage from './components/views/LoginPage/LoginPage'
 import RegisterPage from './components/views/RegisterPage/RegisterPage'
 import Board from './components/views/Board/Board'
+import Logout from './components/views/User/Logout'
 
 
 function App() {
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route path="/board/list/:page">
             <Board/>
+          </Route>
+          <Route path="/logout">
+            <Logout/>
           </Route>
         </Switch>
       </div>

@@ -2,19 +2,20 @@ import React,{useState} from 'react'
 import {useLocation} from "react-router";
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
+import NavBarUser from '../NavBar/NavBarUser'
 import '../../../css/style.css'
 import {useDispatch} from 'react-redux'
 import {boardView} from '../../../_actions/user_action'
 import { RiContactsBookUploadLine } from 'react-icons/ri';
 
 function Board(props){
-
     const [Title, setTitle] = useState("")
     const [Rows, setRows] = useState("")
     const [Pagenum, setPagenum] = useState("")
     const [Page, setPage] = useState("")
     const [Length, setLength] = useState("")
     const [Lastidx, setLastidx] = useState("")
+    const [Session,setSession] = useState("")
 
     const dispatch = useDispatch();
     dispatch(boardView())
@@ -26,8 +27,16 @@ function Board(props){
             setPage(result.page);
             setLength(result.length);
             setLastidx(result.lastidx);
+            setSession(result.userName);
         })
     
+    const sessionValue = (Session) =>{
+        if (typeof Session!=='undefined' || Session==''){
+            return true;
+        }else{
+            return false;
+        }
+    }
     const postRendering = () =>{
         const result=[];
         for (let i=0; i<Rows.length; i++){
@@ -61,7 +70,7 @@ function Board(props){
 
     return(
         <div>
-            <NavBar/>
+            {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
                 <div className= "ContentContainer" id="ContentContainer" style={{top:"50px"}}>
                     <div className="ContentField" style={{textAlign:"center"}}>
                         <h1>{Title}</h1>
