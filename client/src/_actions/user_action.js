@@ -6,7 +6,8 @@ import {
     BOARD_VIEW,
     POST_VIEW,
     POST_RECOM,
-    POST_RECOMDEL
+    POST_RECOMDEL,
+    POST_WRITE
 } from './types';
 
 export function loginUser(dataToSubmit){
@@ -75,6 +76,16 @@ export function postRecomDel(props){
 
     return {
         type:POST_RECOMDEL,
+        payload: request
+    }
+}
+
+export function postWrite(props,dataToSubmit){
+    const request=axios.post('/api/write/'+props,dataToSubmit)
+    .then(response=>response.data);
+
+    return {
+        type:POST_WRITE,
         payload: request
     }
 }

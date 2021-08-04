@@ -153,10 +153,10 @@ router.get('/board/write/:idx',function(req,res,next){
   }
 })
 
-router.post('/insert',(req,res)=>{
+router.post('/api/write/:idx',(req,res)=>{
   if (typeof req.session.displayName!=='undefined'){
-    const title = req.body.title;
-    const content = req.body.content;
+    const title = req.body.Title;
+    const content = req.body.Content;
     const author = req.session.displayName;
     let filepath = '';
     if (typeof req.session.filepath=='undefined'){
@@ -165,7 +165,8 @@ router.post('/insert',(req,res)=>{
       filepath=req.session.filepath;
     }
     if (title.length==0 || content.length==0){
-     res.send("<script>alert('제목 또는 내용에 아무것도 작성되지 않았습니다.'); window.history.back();'</script>")
+      res.json({writeSuccess:false})
+      //res.send("<script>alert('제목 또는 내용에 아무것도 작성되지 않았습니다.'); window.history.back();'</script>")
     }
     else{
       const selSql = 'SELECT idx FROM board';
@@ -192,7 +193,8 @@ router.post('/insert',(req,res)=>{
               if (err){
                 throw err;
               }else{
-                res.send("<script>alert('작성되었습니다.'); document.location.href='/board/list'</script>")
+                res.json({writeSuccess:true})
+                //res.send("<script>alert('작성되었습니다.'); document.location.href='/board/list'</script>")
               }
             })
           }
@@ -202,7 +204,8 @@ router.post('/insert',(req,res)=>{
       })     
     }
   }else{
-    res.send("<script>alert('비정상적인 접근입니다.'); document.location.href='/info'</script>")
+    res.json({writeSuccess:false})
+    //res.send("<script>alert('비정상적인 접근입니다.'); document.location.href='/info'</script>")
     req.session.filepath='';
   }
 })

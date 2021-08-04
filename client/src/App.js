@@ -16,6 +16,7 @@ import Board from './components/views/Board/Board'
 import Post from './components/views/Board/Post'
 import PostRecom from './components/views/Board/PostRecom'
 import PostRecomDel from './components/views/Board/PostRecomDel'
+import PostWrite from './components/views/Board/PostWrite'
 
 
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/post/:page" component={Post}/>
           <Route path="/recommend/:idx" component={PostRecom}/>
           <Route path="/recommendDel/:idx" component={PostRecomDel}/>
+          <Route path='/write/:idx' component={PostWrite}/>
         </Switch>
       </div>
     </Router>

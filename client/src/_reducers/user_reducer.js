@@ -5,7 +5,8 @@ import {
     BOARD_VIEW,
     POST_VIEW,
     POST_RECOM,
-    POST_RECOMDEL
+    POST_RECOMDEL,
+    POST_WRITE
 } from '../_actions/types'
 
 export default function (state={}, action){
@@ -30,6 +31,9 @@ export default function (state={}, action){
             break;
         case POST_RECOMDEL:
             return {...state, recomDelSuccess : action.payload}
+            break;
+        case POST_WRITE:
+            return {...state, writeSuccess : action.payload}
             break;
         default:
             return state;

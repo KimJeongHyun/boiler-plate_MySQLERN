@@ -11,3 +11,5 @@ export const POST_VIEW="post_view";
 export const POST_RECOM="post_recom";
 
 export const POST_RECOMDEL="post_recomdel";
+
+export const POST_WRITE="post_write";

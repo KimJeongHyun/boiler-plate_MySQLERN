@@ -145,6 +145,4 @@ function Post(props){
     
 }
 
-Post = React.memo(Post);
-
-export default Post;
+export default React.memo(Post);
