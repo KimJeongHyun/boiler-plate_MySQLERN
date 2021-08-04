@@ -13,3 +13,5 @@ export const POST_RECOM="post_recom";
 export const POST_RECOMDEL="post_recomdel";
 
 export const POST_WRITE="post_write";
+
+export const POST_DELETE="post_delete";

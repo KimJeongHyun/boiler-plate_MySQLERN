@@ -285,11 +285,10 @@ router.post('/board/update',(req,res)=>{
   req.session.updateIdx='';
 })
 
-router.get('/board/delete/:idx',(req,res)=>{
+router.get('/api/board/delete/:idx',(req,res)=>{
   const idx = req.params.idx;
   const authSql = 'SELECT name, uploadfilepath FROM board WHERE idx=?';
-  const delSql = 'DELETE FROM board WHERE idx=?';
-  
+
   conn.getConnection((err,connection)=>{
     if (err) throw err;
     const authQuery = connection.query(authSql,[idx],function(err,rows){
@@ -310,10 +309,12 @@ router.get('/board/delete/:idx',(req,res)=>{
         })
   
         const delQuery = connection.query(delSql,[idx],function(err,rows){
-          res.send("<script>alert('삭제되었습니다.'); document.location.href='/board/list'</script>")
+          res.json({deleteSuccess:true})
+          //res.send("<script>alert('삭제되었습니다.'); document.location.href='/board/list'</script>")
         })
       }else{
-        res.send("<script>alert('작성자가 아닙니다.'); document.location.href='/board/list'</script>")
+        res.json({deleteSuccess:false})
+        //res.send("<script>alert('작성자가 아닙니다.'); document.location.href='/board/list'</script>")
       }
       connection.release();
     })

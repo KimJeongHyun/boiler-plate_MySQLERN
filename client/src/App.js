@@ -17,6 +17,7 @@ import Post from './components/views/Board/Post'
 import PostRecom from './components/views/Board/PostRecom'
 import PostRecomDel from './components/views/Board/PostRecomDel'
 import PostWrite from './components/views/Board/PostWrite'
+import PostDelete from './components/views/Board/PostDelete'
 
 
 
@@ -49,7 +50,8 @@ function App() {
           <Route path="/post/:page" component={Post}/>
           <Route path="/recommend/:idx" component={PostRecom}/>
           <Route path="/recommendDel/:idx" component={PostRecomDel}/>
-          <Route path='/write/:idx' component={PostWrite}/>
+          <Route path="/write/:idx" component={PostWrite}/>
+          <Route path="/delete/:idx" component={PostDelete}/>
         </Switch>
       </div>
     </Router>

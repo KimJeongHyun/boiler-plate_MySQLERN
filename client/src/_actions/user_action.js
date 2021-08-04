@@ -7,7 +7,8 @@ import {
     POST_VIEW,
     POST_RECOM,
     POST_RECOMDEL,
-    POST_WRITE
+    POST_WRITE,
+    POST_DELETE
 } from './types';
 
 export function loginUser(dataToSubmit){
@@ -86,6 +87,16 @@ export function postWrite(props,dataToSubmit){
 
     return {
         type:POST_WRITE,
+        payload: request
+    }
+}
+
+export function postDelete(props){
+    const request=axios.get('/api/board/delete/'+props)
+    .then(response=>response.data);
+
+    return {
+        type:POST_DELETE,
         payload: request
     }
 }
