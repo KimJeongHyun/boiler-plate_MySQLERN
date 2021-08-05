@@ -43,20 +43,22 @@ router.get('/myProfileEdit',(req,res)=>{
     }
 })
 
-router.post('/myProfileEditSubmit',(req,res)=>{
+router.post('/api/myProfileEdit',(req,res)=>{
     let birth = req.body.birth;
-    const mailID = req.body.mailID;
-    const mailISP = req.body.mailISPInserted;
-    let mailAddress = mailID+'@'+mailISP;
+    const mailID='';
+    const mailISP='';
+    let mailAddress ='';
+    //const mailID = req.body.mailID;
+    //const mailISP = req.body.mailISPInserted;
+    //let mailAddress = mailID+'@'+mailISP;
     let phone = req.body.phonePrefix+req.body.phoneInfix+req.body.phonePostfix;
-    let address = req.body.roadAddrPart1 + ' ' + req.body.addrDetail + ' ' + req.body.zipNo;
-    
-    
+    let address = req.body.address + ' ' + req.body.subaddress + ' ' + req.body.zipcode;
+
     if (birth==''){
         birth=null;
     }else if(mailID=='' || mailISP==''){
         mailAddress=null;
-    }else if(req.body.roadAddrPart1=='' || req.body.addrDetail=='' || req.body.zipNo==''){
+    }else if(req.body.address=='' || req.body.subaddress=='' || req.body.zipcode==''){
         address=null;
     }else if(phone==''){
         phone=null;
@@ -69,7 +71,8 @@ router.post('/myProfileEditSubmit',(req,res)=>{
             const updateSql = 'UPDATE users SET birth=?, mail=?, phone=?, address=? WHERE id = ?';
             const updateQuery = connection.query(updateSql,[birth,mailAddress,phone,address,req.session.displayName],function(err,rows){
                 if (err) throw err;
-                res.send("<script>alert('업데이트되었습니다.'); document.location.href='/myProfile'</script>")
+                res.json({profileEditSuccess:true})
+                //res.send("<script>alert('업데이트되었습니다.'); document.location.href='/myProfile'</script>")
             })
             connection.release();
         })

@@ -3,8 +3,9 @@ import {useDispatch} from 'react-redux'
 import {registerUser} from '../../../_actions/user_action'
 import PopupDom from './PopupDom';
 import PopupContent from './PopupContent';
+import { withRouter } from 'react-router-dom';
 
-function RegisterPage() {
+function RegisterPage(props) {
     const dispatch = useDispatch();
     
     const [Id, setId] = useState("")
@@ -17,6 +18,7 @@ function RegisterPage() {
     const [Phone, setPhone] = useState("")
     const [Address, setAddress] = useState("")
     const [SubAddress,setSubAddress] = useState("")
+    const [ZipCode,setZipCode] = useState("")
     const [childWindow,setChildWindow] = useState(false);
 
     const openDiv = (event) =>{
@@ -73,10 +75,23 @@ function RegisterPage() {
             mail:Mail,
             phone:Phone,
             address:Address,
-            subaddress:SubAddress
-
+            subaddress:SubAddress,
+            zipcode:ZipCode
         }
         dispatch(registerUser(body))
+        .then(response=>{
+            if (response.payload.registerSuccess){
+                alert('환영합니다!');
+                props.history.push({
+                    pathname:"/"
+                });
+            }else{
+                alert('Error');
+                props.history.push({
+                    pathname:"/"
+                })
+            }
+        })
         
     }
 
@@ -108,7 +123,7 @@ function RegisterPage() {
                 <input type="text" value={Address} readOnly/>
                 <span id='popupDom' onClick={openDiv}>주소 찾기</span>
                     <div id='post_content' hidden>
-                        {childWindow && <PopupDom><PopupContent setAddress={setAddress} closeDiv={closeDiv}/></PopupDom>}
+                        {childWindow && <PopupDom><PopupContent setAddress={setAddress} setZipCode={setZipCode} closeDiv={closeDiv}/></PopupDom>}
                     </div>
                 <label>추가 주소</label>
                 <input type="text" value={SubAddress} onChange={onSubAddressHandler}/>
@@ -122,4 +137,4 @@ function RegisterPage() {
     )
 }
 
-export default RegisterPage
+export default withRouter(RegisterPage)

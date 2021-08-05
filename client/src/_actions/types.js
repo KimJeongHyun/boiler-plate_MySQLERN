@@ -6,6 +6,8 @@ export const LOGOUT_USER="logout_user";
 
 export const PROFILE_USER="profile_user";
 
+export const PROFILE_USER_EDIT="profile_user_edit";
+
 export const BOARD_VIEW="board_view";
 
 export const POST_VIEW="post_view";

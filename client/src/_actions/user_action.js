@@ -4,6 +4,7 @@ import {
     REGISTER_USER,
     LOGOUT_USER,
     PROFILE_USER,
+    PROFILE_USER_EDIT,
     BOARD_VIEW,
     POST_VIEW,
     POST_RECOM,
@@ -48,6 +49,16 @@ export function profileUser(){
 
     return {
         type:PROFILE_USER,
+        payload: request
+    }
+}
+
+export function profileUserEdit(dataToSubmit){
+    const request=axios.post('/api/myProfileEdit',dataToSubmit)
+    .then(response=>response.data);
+
+    return {
+        type:PROFILE_USER_EDIT,
         payload: request
     }
 }

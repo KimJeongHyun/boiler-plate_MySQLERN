@@ -3,6 +3,7 @@ import {
     REGISTER_USER,
     LOGOUT_USER,
     PROFILE_USER,
+    PROFILE_USER_EDIT,
     BOARD_VIEW,
     POST_VIEW,
     POST_RECOM,
@@ -24,7 +25,10 @@ export default function (state={}, action){
             break;
         case PROFILE_USER:
             return {...state, profileElement : action.payload}
-            break;     
+            break;
+        case PROFILE_USER_EDIT:
+            return {...state, profileEditSuccess : action.payload}
+            break;         
         case BOARD_VIEW:
             return {...state, boardElement : action.payload}
             break;

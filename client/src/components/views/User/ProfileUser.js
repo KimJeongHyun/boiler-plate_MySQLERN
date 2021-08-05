@@ -13,7 +13,7 @@ function ProfileUser(){
         .then(response=>{
             const result = response.payload;
             setRows(result.rows);
-        })
+    })
 
     const addressRendering = () =>{
         const result = [];

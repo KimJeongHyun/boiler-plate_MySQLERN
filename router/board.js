@@ -280,6 +280,7 @@ router.post('/board/update',(req,res)=>{
       }
     }
     worker();
+  
   })
   req.session.filepath='';
   req.session.updateIdx='';

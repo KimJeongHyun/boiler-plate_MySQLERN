@@ -33,6 +33,9 @@ function LoginPage(props){
                 });
             }else{
                 alert('Error');
+                props.history.push({
+                    pathname:"/"
+                })
             }
         })
         
