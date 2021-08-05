@@ -1,10 +1,7 @@
 # React + Node boiler-plate
 
-1. 현재 Id type 확인해서 Navbar 표시 바꾸기
-2. 로그인시 loginInfo로 리다이렉트 
-3. 회원가입 주소 api 적용 -> OK
-4. 로그아웃 버튼
-5. 게시판 -> OK -> 각 post 렌더링 필요
+1. 로그인시 loginInfo로 리다이렉트 
+2. 회원가입시 사용자가 알맞는 형식 입력하게끔 유도
 6. 검색 필터
 7. 파일 업로드
 8. 파일 다운로드
