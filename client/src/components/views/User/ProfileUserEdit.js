@@ -134,9 +134,9 @@ function ProfileUserEdit(props){
                     <option value="019">019</option>
                 </select>
                 -
-                <input style={{border:"0.2", width:"10%"}} type="number" name="phoneInfix" id="phoneInfix"  maxLength={4} value={PhoneInfix} onChange={onPhoneInfixHandler}/>
+                <input style={{border:"0.2", width:"10%"}} type="number" name="phoneInfix" id="phoneInfix" minLength={4} maxLength={4} value={PhoneInfix} onChange={onPhoneInfixHandler}/>
                 -
-                <input style={{border:"0.2", width:"10%"}} type="number" name="phonePostfix" id="phonePostfix" maxLength={4} value={PhonePostfix} onChange={onPhonePostfixHandler}/>                                             
+                <input style={{border:"0.2", width:"10%"}} type="number" name="phonePostfix" id="phonePostfix" minLength={4} maxLength={4} value={PhonePostfix} onChange={onPhonePostfixHandler}/>                                             
                 <input type="text" value={Address} readOnly/>
                 <input type="text" value={ZipCode} readOnly/>
                 <div id='post_content' hidden>
