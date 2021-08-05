@@ -18,7 +18,8 @@ import PostRecom from './components/views/Board/PostRecom'
 import PostRecomDel from './components/views/Board/PostRecomDel'
 import PostWrite from './components/views/Board/PostWrite'
 import PostDelete from './components/views/Board/PostDelete'
-
+import ProfileUser from './components/views/User/ProfileUser'
+import ProfileUserEdit from './components/views/User/ProfileUserEdit'
 
 
 function App() {
@@ -52,6 +53,8 @@ function App() {
           <Route path="/recommendDel/:idx" component={PostRecomDel}/>
           <Route path="/write/:idx" component={PostWrite}/>
           <Route path="/delete/:idx" component={PostDelete}/>
+          <Route path="/myProfile" component={ProfileUser}/>
+          <Route path="/myProfileEdit" component={ProfileUserEdit}/>
         </Switch>
       </div>
     </Router>

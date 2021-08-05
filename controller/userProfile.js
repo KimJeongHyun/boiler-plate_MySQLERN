@@ -3,7 +3,7 @@ const path = require('path');
 const mysql = require('../database')();
 const conn = mysql.init();
 
-router.get('/myProfile',(req,res)=>{
+router.get('/api/myProfile',(req,res)=>{
     if (typeof req.session.displayName!=='undefined'){
         const sql = 'SELECT id, uname, date_format(birth, "%Y-%m-%d") as birthF, mail, phone, address, nick FROM users WHERE id=?';
         conn.getConnection((err,connection)=>{
@@ -13,12 +13,14 @@ router.get('/myProfile',(req,res)=>{
                 if (rows[0].phone.slice(0,2)=='02' && rows[0].phone[2]!=' '){
                     rows[0].phone = '02 '+rows[0].phone.slice(2);
                 }
-                res.render("userHTML/myProfile.html",{rows:rows});
+                res.json({profileElement:true, rows:rows[0]});
+                //res.render("userHTML/myProfile.html",{rows:rows});
                 connection.release();
             })
         })
     }else{
-        res.send("<script>alert('비정상적인 접근입니다.'); document.location.href='/info'</script>")
+        res.json({profileElement:false});
+        //res.send("<script>alert('비정상적인 접근입니다.'); document.location.href='/info'</script>")
     }
 })
 

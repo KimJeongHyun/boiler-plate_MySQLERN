@@ -2,6 +2,7 @@ import {
     LOGIN_USER,
     REGISTER_USER,
     LOGOUT_USER,
+    PROFILE_USER,
     BOARD_VIEW,
     POST_VIEW,
     POST_RECOM,
@@ -20,7 +21,10 @@ export default function (state={}, action){
             break;
         case LOGOUT_USER:
             return {...state, logoutSuccess : action.payload}
-            break;    
+            break;
+        case PROFILE_USER:
+            return {...state, profileElement : action.payload}
+            break;     
         case BOARD_VIEW:
             return {...state, boardElement : action.payload}
             break;

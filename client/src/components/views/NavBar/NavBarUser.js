@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import { BiChalkboard, BiHomeHeart, BiMenuAltLeft, BiSupport, BiClipboard } from "react-icons/bi";
 import { DiReact } from "react-icons/di";
 import { RiLogoutCircleRFill  } from "react-icons/ri";
+import { FaRegUserCircle } from "react-icons/fa";
 
 export function NavBarUser(){
     useEffect(()=>{
@@ -45,6 +46,7 @@ export function NavBarUser(){
                         <div className="guestContent" id="guestContent">
                             <a href="/logout" id="functionName"><span id='linkName'>Logout</span><RiLogoutCircleRFill id='linkBtn'/></a>
                             <br/>
+                            <a href="/myProfile" id="functionName"><span id='linkName'>Profile</span><FaRegUserCircle id='linkBtn'/></a>
                         </div> 
                     </div>         
                 </ul>

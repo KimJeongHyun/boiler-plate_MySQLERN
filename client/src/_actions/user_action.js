@@ -3,6 +3,7 @@ import {
     LOGIN_USER,
     REGISTER_USER,
     LOGOUT_USER,
+    PROFILE_USER,
     BOARD_VIEW,
     POST_VIEW,
     POST_RECOM,
@@ -37,6 +38,16 @@ export function logout(){
 
     return {
         type:LOGOUT_USER,
+        payload: request
+    }
+}
+
+export function profileUser(){
+    const request=axios.get('/api/myProfile')
+    .then(response=>response.data);
+
+    return {
+        type:PROFILE_USER,
         payload: request
     }
 }
