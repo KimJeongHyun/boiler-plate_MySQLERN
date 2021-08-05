@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
-import { Redirect } from 'react-router-dom';
+import ScrollTop from '../TopBtn/ScrollTop'
 import {postWrite} from '../../../_actions/user_action'
-
+import NavBarUser from '../NavBar/NavBarUser'
 
 function PostWrite(props){
     const dispatch = useDispatch();
@@ -38,6 +38,7 @@ function PostWrite(props){
 
     return(
         <div>
+            <NavBarUser/>
             <div className= "ContentContainer" id="ContentContainer">
                 <div className="ContentField">
                     <form onSubmit={onSubmitHandler}>
@@ -67,6 +68,7 @@ function PostWrite(props){
                     </form>
                 </div>
             </div>
+            <ScrollTop/>
         </div>
     )
 }

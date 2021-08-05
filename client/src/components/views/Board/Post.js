@@ -1,4 +1,5 @@
 import React,{useEffect,useState} from 'react'
+import axios from 'axios'
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
@@ -9,6 +10,23 @@ import {postView} from '../../../_actions/user_action'
 
 function Post(props){
 
+
+    const [Session,setSession] = useState("")
+
+    useEffect(()=>{
+        axios.get('/api/getSession')
+        .then(response=>{
+            setSession(response.data);
+        })
+    },[])
+
+    const sessionValue = (Session) =>{
+        if (Session.length>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
     const [Title, setTitle] = useState("")
     const [Rows, setRows] = useState("")
     const [Filename, setFilename] = useState("")
@@ -104,6 +122,7 @@ function Post(props){
         
     return(
         <div>
+            {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
             <div className= "ContentContainer" id="ContentContainer">
                 <div className="ContentField">
                     <table style={{width:"80vw", height:"80vw", paddingLeft:"50px"}}>
@@ -140,6 +159,7 @@ function Post(props){
                     </table>
                 </div>
             </div>
+            <ScrollTop/>
         </div>
     )
     

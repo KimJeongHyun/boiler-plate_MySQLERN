@@ -33,6 +33,7 @@ const PopupContent = (props) => {
         display: 'block',
         position: 'relative',
         top: '0%',
+        left: '25%',
         width: '400px',
         height: '400px',
         padding: '7px',

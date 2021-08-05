@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { profileUser } from '../../../_actions/user_action'
+import NavBarUser from '../NavBar/NavBarUser'
 
 
 function ProfileUser(){
@@ -43,7 +44,8 @@ function ProfileUser(){
 
     return(
         <div>
-            <div className= "ContentContainer" id="ContentContainer">
+            <NavBarUser/>
+            <div className= "ContentContainer" id="ContentContainer" style={{top:"50px"}}>
                 <div className="ContentField" style={{textAlign:"center"}}>
                     <div style={{display:"inline-block"}}>
                         <h1 style={{width:"20%", minWidth:"400px"}}>User Profile</h1>
