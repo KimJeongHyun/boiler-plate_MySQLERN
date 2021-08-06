@@ -1,4 +1,6 @@
-import React, {useState} from 'react'
+import React, {useEffect,useState} from 'react'
+import ReactDOM from 'react-dom'
+import axios from 'axios'
 import {useDispatch} from 'react-redux'
 import ScrollTop from '../TopBtn/ScrollTop'
 import {postWrite} from '../../../_actions/user_action'
@@ -10,7 +12,7 @@ function PostWrite(props){
 
     const [Title,setTitle] = useState("")
     const [Content,setContent] = useState("")
-    const [ServerRes, setServerRes] = useState("")
+    const [ServerRes, setServerRes] = useState()
     const onTitleHandler = (event) =>{
         setTitle(event.currentTarget.value);
     }
@@ -39,39 +41,67 @@ function PostWrite(props){
         })
     }
 
-    return(
-        <div>
-            <NavBarUser/>
-            <div className= "ContentContainer" id="ContentContainer">
-                <div className="ContentField">
-                    <form onSubmit={onSubmitHandler}>
-                        <table style={{width:"80vw", height:"80vh", paddingLeft:"50px"}}>
-                            <tr>
-                                <td colSpan="2" style={{height:"10%", paddingTop:"3vh"}}>
-                                    <input style={{border:"none", width:"100%", fontSize:"2em", fontWeight:"bold"}} type="text" value={Title} placeholder="제목을 작성해주세요!" onChange={onTitleHandler} required /> 
-                                </td>
-                            </tr>
-                            <tr>
-                            {/*<td>
-                                <input type="button" id = "<%=id%>" value="파일 업로드" onClick="openChild(this)"/>
-                                <span id="sInput" style={{fontSize:"12px"}}></span><a href="/uploadedFileDelete/<%=id%>"><input type="button" tyle="margin-left:20px" value="업로드 취소" onClick="deleteFile()"/></a>
-                            </td>*/}
-                            </tr>
-                            <tr>
-                            <td colSpan="2" style={{paddingTop:"20px"}}>
-                                <textarea style={{border:"none", width:"100%", height:"100%", paddingTop:"20px", fontSize:"1.3em"}} value={Content} placeholder="내용을 작성해주세요!" onChange={onContentHandler} required ></textarea>
-                            </td>
-                            </tr>
-                            <tr>
-                            <td colSpan="2" style={{textAlign:"right"}}>
-                                <button>글 쓰기</button>
-                            </td>
-                            </tr>
-                        </table>
-                    </form>
+    useEffect(()=>{
+        axios.get('/api/getSession')
+        .then(response=>{
+            setServerRes(response.data.isAuth);
+        })
+        
+        const trueFunc = () =>{
+            return (
+                <div>
+                    <NavBarUser/>
+                    <div className= "ContentContainer" id="ContentContainer">
+                        <div className="ContentField">
+                            <form onSubmit={onSubmitHandler}>
+                                <table style={{width:"80vw", height:"80vh", paddingLeft:"50px"}}>
+                                    <tr>
+                                        <td colSpan="2" style={{height:"10%", paddingTop:"3vh"}}>
+                                            <input style={{border:"none", width:"100%", fontSize:"2em", fontWeight:"bold"}} type="text" value={Title} placeholder="제목을 작성해주세요!" onChange={onTitleHandler} required /> 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    {/*<td>
+                                        <input type="button" id = "<%=id%>" value="파일 업로드" onClick="openChild(this)"/>
+                                        <span id="sInput" style={{fontSize:"12px"}}></span><a href="/uploadedFileDelete/<%=id%>"><input type="button" tyle="margin-left:20px" value="업로드 취소" onClick="deleteFile()"/></a>
+                                    </td>*/}
+                                    </tr>
+                                    <tr>
+                                    <td colSpan="2" style={{paddingTop:"20px"}}>
+                                        <textarea style={{border:"none", width:"100%", height:"100%", paddingTop:"20px", fontSize:"1.3em"}} value={Content} placeholder="내용을 작성해주세요!" onChange={onContentHandler} required ></textarea>
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td colSpan="2" style={{textAlign:"right"}}>
+                                        <button>글 쓰기</button>
+                                    </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    <ScrollTop/>
                 </div>
-            </div>
-            <ScrollTop/>
+            )
+        }
+
+        const falseFunc = () =>{
+            return(
+                <div>
+                    {alert('먼저 로그인하시기 바랍니다.')}
+                </div>
+            )
+        }
+        if (ServerRes==true){
+            ReactDOM.render(trueFunc(),document.getElementById('Container'));
+        }else if (ServerRes==false){
+            ReactDOM.render(falseFunc(),document.getElementById('Container'));
+        }
+
+    },[ServerRes])
+
+    return(
+        <div id="Container">
         </div>
     )
 }

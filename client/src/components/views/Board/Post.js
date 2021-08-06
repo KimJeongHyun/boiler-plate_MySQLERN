@@ -7,7 +7,8 @@ import NavBarUser from '../NavBar/NavBarUser'
 import '../../../css/style.css'
 import {useDispatch} from 'react-redux'
 import {postView} from '../../../_actions/user_action'
-import { Redirect } from 'react-router-dom';
+import { withRouter ,Redirect } from 'react-router-dom';
+
 
 
 function Post(props){
@@ -174,7 +175,7 @@ function Post(props){
         const falseFunc = () =>{
             return(
                 <div>
-                    {alert('hi')}
+                    {alert('존재하지 않는 포스트입니다.',props.history.push('/board/list/1'))}
                 </div>
             )
         }
@@ -194,4 +195,4 @@ function Post(props){
     
 }
 
-export default Post;
+export default withRouter(Post);
