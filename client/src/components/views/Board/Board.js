@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useEffect,useState} from 'react'
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
@@ -16,7 +16,8 @@ function Board(props){
     const [Session,setSession] = useState("")
     const dispatch = useDispatch();
 
-    dispatch(boardView(props.idx))
+    useEffect(()=>{
+        dispatch(boardView(props.idx))
         .then(response=>{
             const result = response.payload;
             setTitle(result.title);
@@ -27,6 +28,9 @@ function Board(props){
             setLastidx(result.lastidx);
             setSession(result.userName);
         })
+    },[])
+
+
     const sessionValue = (Session) =>{
         if (typeof Session!=='undefined' || Session==''){
             return true;
@@ -112,4 +116,4 @@ function Board(props){
     
 }
 
-export default React.memo(Board)
+export default Board

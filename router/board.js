@@ -14,6 +14,7 @@ router.get('/board/list',function (req,res,next) {
 
 router.get('/api/board/list/:page', function(req, res, next) {
   const page = req.params.page;
+  console.log(page);
   req.session.refresh = true;
   const sql = 'SELECT idx, nick, title, content, hit FROM board ORDER BY idx DESC'; // 페이징 포스트가 최근 작성된 것부터 보이도록 DESC 처리.
   conn.getConnection((err,connection)=>{
@@ -28,7 +29,7 @@ router.get('/api/board/list/:page', function(req, res, next) {
         res.json({title:'게시판 리스트', lastidx:1});
         //res.render('boardHTML/pageEmpty.html',{title:'게시판 리스트',lastidx:1});
       }else{
-        res.json({title:'게시판 리스트', rows:rows, page:1, length:rows.length-1,page_num:10,lastidx:rows[0].idx+1,userName:req.session.displayName});
+        res.json({title:'게시판 리스트', rows:rows, page:page, length:rows.length-1,page_num:10,lastidx:rows[0].idx+1,userName:req.session.displayName});
         //res.render('boardHTML/page.html',{title:'게시판 리스트',rows:rows, page:page, length:rows.length-1, page_num:10, lastidx:rows[0].idx+1,userName:req.session.displayName});
       }
       connection.release();

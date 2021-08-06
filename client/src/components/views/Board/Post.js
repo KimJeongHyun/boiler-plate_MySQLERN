@@ -108,7 +108,6 @@ function Post(props){
     }
 
     useEffect(()=>{
-       
         let imageShowBtn = document.getElementById('imageShowBtn');
         let imageHideBtn = document.getElementById('imageHideBtn');
         if (imageShowBtn!==null && imageHideBtn!==null){
