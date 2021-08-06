@@ -6,12 +6,12 @@ import NavBarUser from '../NavBar/NavBarUser'
 import '../../../css/style.css'
 import {useDispatch} from 'react-redux'
 import {postView} from '../../../_actions/user_action'
+import { Redirect } from 'react-router-dom';
 
 
 function Post(props){
-
-
     const [Session,setSession] = useState("")
+    const [ServerRes,setServerRes] = useState(false);
 
     useEffect(()=>{
         axios.get('/api/getSession')
@@ -34,16 +34,76 @@ function Post(props){
     const [Postloc, setPostloc] = useState("")
 
     const dispatch = useDispatch();
-    dispatch(postView(props.match.params.page))
+    dispatch(postView(props.idx))
             .then(response=>{
                 const result = response.payload;
-                setTitle(result.title);
-                setRows(result.rows);
-                setFilename(result.fileName);
-                setImgpath(result.imgPaths);
-                setPostloc(result.postLoc);
+                if (result.postElement){
+                    setTitle(result.title);
+                    setRows(result.rows);
+                    setFilename(result.fileName);
+                    setImgpath(result.imgPaths);
+                    setPostloc(result.postLoc);
+                    setServerRes(true);
+                }else{
+                    setServerRes(false);
+                }
+                
     })
 
+    const resultRendering = (ServerRes) =>{
+        if (ServerRes){
+            return(
+                <div>
+                    <div>
+                    {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
+                        <div className= "ContentContainer" id="ContentContainer">
+                            <div className="ContentField">
+                                <table style={{width:"80vw", height:"80vw", paddingLeft:"50px"}}>
+                                    <thead>
+                                        <tr>
+                                            <td colSpan="2" style={{height:"10%"}} ><h1><strong>{Rows.title}</strong></h1></td>
+                                        </tr>
+                                        <tr>
+                                            <td>{Rows.nick} 조회수: {Rows.hit} 추천수: {Rows.recommend}</td>
+                                        </tr>
+                                        <tr>
+                                            {filenameRendering()}
+                                        </tr>
+                                        <tr>
+                                            {imgpathRendering()}
+                                        </tr>
+                                        <tr>
+                                        <td>
+                                            <input type="button" id="imageShowBtn" value="첨부된 이미지 보기"/>
+                                            <input type="button" id="imageHideBtn" value="이미지 닫기" hidden/>
+                                        </td>    
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style={{height:"100%"}}>
+                                            <td colSpan={Filename.length} style={{verticalAlign:"top", paddingTop:"20px"}}>{Rows.content}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            {tablefootRendering()}
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <ScrollTop/>
+                    </div>
+                </div>
+            )
+        }else{
+            return(
+                <div>
+
+                </div>
+            )   
+        }
+    }
 
     const filenameRendering = () => {
         const result=[];
@@ -105,61 +165,25 @@ function Post(props){
        
         let imageShowBtn = document.getElementById('imageShowBtn');
         let imageHideBtn = document.getElementById('imageHideBtn');
-
-        imageShowBtn.addEventListener('click',function(){
-            document.getElementById('imageShowBtn').setAttribute('hidden','hidden');
-            document.getElementById('imageHideBtn').removeAttribute('hidden');
-            document.getElementById('imgs').removeAttribute('hidden');
-        })
-
-        imageHideBtn.addEventListener('click', function(){
-            document.getElementById('imageShowBtn').removeAttribute('hidden');
-            document.getElementById('imageHideBtn').setAttribute('hidden','hidden');
-            document.getElementById('imgs').setAttribute('hidden','hidden');
-        })
+        if (imageShowBtn!==null && imageHideBtn!==null){
+            imageShowBtn.addEventListener('click',function(){
+                document.getElementById('imageShowBtn').setAttribute('hidden','hidden');
+                document.getElementById('imageHideBtn').removeAttribute('hidden');
+                document.getElementById('imgs').removeAttribute('hidden');
+            })
+    
+            imageHideBtn.addEventListener('click', function(){
+                document.getElementById('imageShowBtn').removeAttribute('hidden');
+                document.getElementById('imageHideBtn').setAttribute('hidden','hidden');
+                document.getElementById('imgs').setAttribute('hidden','hidden');
+            })
+        }
     })
 
         
     return(
         <div>
-            {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
-            <div className= "ContentContainer" id="ContentContainer">
-                <div className="ContentField">
-                    <table style={{width:"80vw", height:"80vw", paddingLeft:"50px"}}>
-                        <thead>
-                            <tr>
-                                <td colSpan="2" style={{height:"10%"}} ><h1><strong>{Rows.title}</strong></h1></td>
-                            </tr>
-                            <tr>
-                                <td>{Rows.nick} 조회수: {Rows.hit} 추천수: {Rows.recommend}</td>
-                            </tr>
-                            <tr>
-                                {filenameRendering()}
-                            </tr>
-                            <tr>
-                                {imgpathRendering()}
-                            </tr>
-                            <tr>
-                            <td>
-                                <input type="button" id="imageShowBtn" value="첨부된 이미지 보기"/>
-                                <input type="button" id="imageHideBtn" value="이미지 닫기" hidden/>
-                            </td>    
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <tr style={{height:"100%"}}>
-                                <td colSpan={Filename.length} style={{verticalAlign:"top", paddingTop:"20px"}}>{Rows.content}</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                {tablefootRendering()}
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-            <ScrollTop/>
+            {resultRendering(ServerRes)}
         </div>
     )
     

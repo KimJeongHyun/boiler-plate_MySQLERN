@@ -6,7 +6,7 @@ import {postDelete} from '../../../_actions/user_action'
 
 function PostDelete(props){
     const dispatch = useDispatch();
-    dispatch(postDelete(props.match.params.idx))
+    dispatch(postDelete(props.idx))
         .then(response=>{
             
         })

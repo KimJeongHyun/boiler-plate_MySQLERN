@@ -3,13 +3,14 @@ import {useDispatch} from 'react-redux'
 import ScrollTop from '../TopBtn/ScrollTop'
 import {postWrite} from '../../../_actions/user_action'
 import NavBarUser from '../NavBar/NavBarUser'
+import { withRouter } from 'react-router-dom';
 
 function PostWrite(props){
     const dispatch = useDispatch();
 
     const [Title,setTitle] = useState("")
     const [Content,setContent] = useState("")
-
+    const [ServerRes, setServerRes] = useState("")
     const onTitleHandler = (event) =>{
         setTitle(event.currentTarget.value);
     }
@@ -24,14 +25,16 @@ function PostWrite(props){
             Title:Title,
             Content:Content
         }
-        dispatch(postWrite(props.match.params.idx,body))
+        dispatch(postWrite(props,body))
         .then(response=>{
             if (response.payload.writeSuccess){
+                setServerRes(true);
                 props.history.push({
                     pathname:"/board/list/1"
                 });
             }else{
-                alert('Error');
+                setServerRes(false);
+                alert('Error!');
             }
         })
     }
@@ -73,4 +76,4 @@ function PostWrite(props){
     )
 }
 
-export default PostWrite
+export default withRouter(PostWrite);

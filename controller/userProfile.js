@@ -7,7 +7,7 @@ router.get('/api/myProfile',(req,res)=>{
     if (typeof req.session.displayName!=='undefined'){
         const sql = 'SELECT id, uname, date_format(birth, "%Y-%m-%d") as birthF, mail, phone, address, nick FROM users WHERE id=?';
         conn.getConnection((err,connection)=>{
-            if (err) throw err;
+            if (err) res.json({profileElement:false});
             const query = connection.query(sql,[req.session.displayName],function(err,rows){
                 if (err) throw err;
                 if (rows[0].phone.slice(0,2)=='02' && rows[0].phone[2]!=' '){
@@ -70,7 +70,7 @@ router.post('/api/myProfileEdit',(req,res)=>{
         const authQuery = connection.query(authSql,[req.session.displayName],function(err,rows){
             const updateSql = 'UPDATE users SET birth=?, mail=?, phone=?, address=? WHERE id = ?';
             const updateQuery = connection.query(updateSql,[birth,mailAddress,phone,address,req.session.displayName],function(err,rows){
-                if (err) throw err;
+                if (err) res.json({profileEditSuccess:false});
                 res.json({profileEditSuccess:true})
                 //res.send("<script>alert('업데이트되었습니다.'); document.location.href='/myProfile'</script>")
             })

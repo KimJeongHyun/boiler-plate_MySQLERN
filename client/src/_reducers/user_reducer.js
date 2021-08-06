@@ -1,4 +1,5 @@
 import {
+    AUTH_USER,
     LOGIN_USER,
     REGISTER_USER,
     LOGOUT_USER,
@@ -14,6 +15,9 @@ import {
 
 export default function (state={}, action){
     switch (action.type){
+        case AUTH_USER:
+            return {...state, authData: action.payload}
+            break;
         case LOGIN_USER:
             return {...state, loginSuccess: action.payload}
             break;

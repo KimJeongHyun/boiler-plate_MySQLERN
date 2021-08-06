@@ -8,6 +8,8 @@ import {
   HashRouter
 } from "react-router-dom"
 
+import Auth from './hoc/auth'
+import Forbidden from './components/views/ErrorPage/Forbidden'
 import LandingPage from './components/views/LandingPage/LandingPage'
 import LoginPage from './components/views/LoginPage/LoginPage'
 import Logout from './components/views/User/Logout'
@@ -33,28 +35,27 @@ function App() {
           you have multiple routes, but you want only one
           of them to render at a time
         */}
+
+        
         <Switch>
-          {/* <Route exact path="/" component={LandingPage} */}
-          <Route exact path="/">
-            <LandingPage />
-          </Route>
-          <Route path="/login">
-            <LoginPage />
-          </Route>
-          <Route path="/register">
-            <RegisterPage />
-          </Route>
-          <Route path="/logout">
-            <Logout/>
-          </Route>
-          <Route path="/board/list/:page" component={Board}/>
-          <Route path="/post/:page" component={Post}/>
-          <Route path="/recommend/:idx" component={PostRecom}/>
-          <Route path="/recommendDel/:idx" component={PostRecomDel}/>
-          <Route path="/write/:idx" component={PostWrite}/>
-          <Route path="/delete/:idx" component={PostDelete}/>
-          <Route path="/myProfile" component={ProfileUser}/>
-          <Route path="/myProfileEdit" component={ProfileUserEdit}/>
+          {/* <Route exact path="/" component={LandingPage}
+            null -> all access
+            true -> only login users
+            false -> only guests
+          */}
+          <Route exact path="/" component={Auth(LandingPage)}/>
+          <Route path="/authError" component={Forbidden}/>
+          <Route path="/login" component={Auth(LoginPage,false)}/>
+          <Route path="/register" component={Auth(RegisterPage,false)}/>
+          <Route path="/logout" component={Auth(Logout,true)}/>
+          <Route path="/board/list/:idx" component={Auth(Board)}/>
+          <Route path="/post/:idx" component={Auth(Post)}/>
+          <Route path="/recommend/:idx" component={Auth(PostRecom,true)}/>
+          <Route path="/recommendDel/:idx" component={Auth(PostRecomDel,true)}/>
+          <Route path="/write/:idx" component={Auth(PostWrite,true)}/>
+          <Route path="/delete/:idx" component={Auth(PostDelete,true)}/>
+          <Route path="/myProfile" component={Auth(ProfileUser,true)}/>
+          <Route path="/myProfileEdit" component={Auth(ProfileUserEdit,true)}/>
         </Switch>
       </div>
     </Router>

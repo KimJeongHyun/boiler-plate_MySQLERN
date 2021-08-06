@@ -14,10 +14,9 @@ function Board(props){
     const [Length, setLength] = useState("")
     const [Lastidx, setLastidx] = useState("")
     const [Session,setSession] = useState("")
-
     const dispatch = useDispatch();
 
-    dispatch(boardView(props.match.params.page))
+    dispatch(boardView(props.idx))
         .then(response=>{
             const result = response.payload;
             setTitle(result.title);
@@ -28,7 +27,6 @@ function Board(props){
             setLastidx(result.lastidx);
             setSession(result.userName);
         })
-
     const sessionValue = (Session) =>{
         if (typeof Session!=='undefined' || Session==''){
             return true;

@@ -76,7 +76,11 @@ app.get('/',(req,res)=>{
 });
 
 app.get('/api/getSession',(req,res)=>{
-    res.send(req.session.displayName);
+    if (typeof req.session.displayName!=='undefined'){
+        res.send({isAuth:true,ID:req.session.displayName});
+    }else{
+        res.send({isAuth:false});
+    }
 })
 
 const server = http.createServer(app);

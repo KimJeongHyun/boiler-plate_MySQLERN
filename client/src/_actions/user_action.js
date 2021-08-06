@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+    AUTH_USER,
     LOGIN_USER,
     REGISTER_USER,
     LOGOUT_USER,
@@ -12,6 +13,16 @@ import {
     POST_WRITE,
     POST_DELETE
 } from './types';
+
+export function auth(){
+    const request=axios.get('/api/getSession')
+    .then(response=>response.data);
+
+    return {
+        type:AUTH_USER,
+        payload: request
+    }
+}
 
 export function loginUser(dataToSubmit){
     const request=axios.post('/api/loginUser',dataToSubmit)
@@ -43,7 +54,7 @@ export function logout(){
     }
 }
 
-export function profileUser(){
+export function profileUser(props){
     const request=axios.get('/api/myProfile')
     .then(response=>response.data);
 

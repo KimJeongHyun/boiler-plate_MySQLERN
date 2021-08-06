@@ -1,4 +1,5 @@
 import React,{useEffect, useState} from 'react'
+import {useHistory,useLocation} from 'react-router-dom'
 import axios from 'axios'
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
@@ -12,21 +13,14 @@ function LandingPage(props){
     useEffect(()=>{
         axios.get('/api/getSession')
         .then(response=>{
-            setSession(response.data);
+            setSession(response.data.isAuth);
         })
     },[])
 
-    const sessionValue = (Session) =>{
-        if (Session.length>0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
+    
     return(
         <div>
-            {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
+            {Session ? <NavBarUser/> : <NavBar/>}
             <div className="ContentContainer">
                 <div className="ContentField">
                     <div style={{
