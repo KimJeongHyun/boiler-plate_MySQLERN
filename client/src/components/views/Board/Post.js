@@ -1,4 +1,5 @@
 import React,{useEffect,useState} from 'react'
+import ReactDOM from 'react-dom'
 import axios from 'axios'
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
@@ -11,7 +12,7 @@ import { Redirect } from 'react-router-dom';
 
 function Post(props){
     const [Session,setSession] = useState("")
-    const [ServerRes,setServerRes] = useState(false);
+    const [ServerRes,setServerRes] = useState();
 
     useEffect(()=>{
         axios.get('/api/getSession')
@@ -49,62 +50,6 @@ function Post(props){
                 }
     })
 
-    console.log(ServerRes);
-
-    const resultRendering = (ServerRes) =>{
-        if (ServerRes){
-            return(
-                <div>
-                    <div>
-                    {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
-                        <div className= "ContentContainer" id="ContentContainer">
-                            <div className="ContentField">
-                                <table style={{width:"80vw", height:"80vw", paddingLeft:"50px"}}>
-                                    <thead>
-                                        <tr>
-                                            <td colSpan="2" style={{height:"10%"}} ><h1><strong>{Rows.title}</strong></h1></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{Rows.nick} 조회수: {Rows.hit} 추천수: {Rows.recommend}</td>
-                                        </tr>
-                                        <tr>
-                                            {filenameRendering()}
-                                        </tr>
-                                        <tr>
-                                            {imgpathRendering()}
-                                        </tr>
-                                        <tr>
-                                        <td>
-                                            <input type="button" id="imageShowBtn" value="첨부된 이미지 보기"/>
-                                            <input type="button" id="imageHideBtn" value="이미지 닫기" hidden/>
-                                        </td>    
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style={{height:"100%"}}>
-                                            <td colSpan={Filename.length} style={{verticalAlign:"top", paddingTop:"20px"}}>{Rows.content}</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            {tablefootRendering()}
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                        <ScrollTop/>
-                    </div>
-                </div>
-            )
-        }else{
-            return(
-                <div>
-
-                </div>
-            )   
-        }
-    }
 
     const filenameRendering = () => {
         const result=[];
@@ -179,16 +124,75 @@ function Post(props){
                 document.getElementById('imgs').setAttribute('hidden','hidden');
             })
         }
-        console.log(ServerRes)
+
+        const trueFunc = () =>{
+            return(
+            <div>
+                <div>
+                    {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
+                    <div className= "ContentContainer" id="ContentContainer">
+                        <div className="ContentField">
+                            <table style={{width:"80vw", height:"80vw", paddingLeft:"50px"}}>
+                                <thead>
+                                    <tr>
+                                        <td colSpan="2" style={{height:"10%"}} ><h1><strong>{Rows.title}</strong></h1></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{Rows.nick} 조회수: {Rows.hit} 추천수: {Rows.recommend}</td>
+                                    </tr>
+                                    <tr>
+                                        {filenameRendering()}
+                                    </tr>
+                                    <tr>
+                                        {imgpathRendering()}
+                                    </tr>
+                                    <tr>
+                                    <td>
+                                        <input type="button" id="imageShowBtn" value="첨부된 이미지 보기"/>
+                                        <input type="button" id="imageHideBtn" value="이미지 닫기" hidden/>
+                                    </td>    
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style={{height:"100%"}}>
+                                        <td colSpan={Filename.length} style={{verticalAlign:"top", paddingTop:"20px"}}>{Rows.content}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        {tablefootRendering()}
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <ScrollTop/>
+                </div>
+            </div>
+            )
+        }
+
+        const falseFunc = () =>{
+            return(
+                <div>
+                    {alert('hi')}
+                </div>
+            )
+        }
+        if (ServerRes==true){
+            ReactDOM.render(trueFunc(),document.getElementById('Container'));
+        }else if (ServerRes==false){
+            ReactDOM.render(falseFunc(),document.getElementById('Container'));
+        }
+        
     },[ServerRes])
 
         
     return(
-        <div>
-            {resultRendering(ServerRes)}
+        <div id="Container">
         </div>
     )
     
 }
 
-export default React.memo(Post);
+export default Post;

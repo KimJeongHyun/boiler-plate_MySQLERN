@@ -43,6 +43,7 @@ router.get('/api/post/:page',function(req,res,next){
     const query = connection.query('SELECT idx, title, name, nick, content, hit, recommend, uploadfilepath FROM board where idx='+page,function(err,rows){
       if (err) {
         res.json({postElement:false})
+        reject('SELECT Err');
       }
       if (rows.length>0){
         const author = rows[0].name;
@@ -144,6 +145,8 @@ router.get('/api/post/:page',function(req,res,next){
         }
         worker();
          // 조회수 증가 후에는 새로고침 세션 값을 false로 돌려 post에서 update가 발생하지 않도록 방지한다.
+      }else{
+        res.json({postElement:false})
       } 
     })
   })
