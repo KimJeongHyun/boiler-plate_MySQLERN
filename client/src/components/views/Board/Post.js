@@ -47,8 +47,9 @@ function Post(props){
                 }else{
                     setServerRes(false);
                 }
-                
     })
+
+    console.log(ServerRes);
 
     const resultRendering = (ServerRes) =>{
         if (ServerRes){
@@ -178,7 +179,8 @@ function Post(props){
                 document.getElementById('imgs').setAttribute('hidden','hidden');
             })
         }
-    })
+        console.log(ServerRes)
+    },[ServerRes])
 
         
     return(

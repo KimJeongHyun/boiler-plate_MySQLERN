@@ -17,7 +17,6 @@ export default function (SpecificComponent, option, adminRoute = null){
                     if (option==true && SpecificComponent.name!=='Logout'){
                         props.history.push('/authError');
                     }
-                    
                 }
             })
         },[])
