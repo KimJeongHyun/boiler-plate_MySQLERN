@@ -6,16 +6,18 @@ import { FaRegUserCircle } from "react-icons/fa";
 
 export function NavBarUser(){
     useEffect(()=>{
+        
+    })
+
+    const menuBtnOnClick = () =>{
         let menuBtn = document.getElementById('menuBtn');
         let sideBar = document.getElementById('sideMenu');
         let bottomContent = document.getElementById('guestContent');
         let contentContainer = document.getElementsByClassName('ContentContainer');
-        menuBtn.addEventListener('click',function(){
-            sideBar.classList.toggle('active');
-            bottomContent.classList.toggle('active');
-            contentContainer[0].classList.toggle('active');
-        })
-    })
+        sideBar.classList.toggle('active');
+        bottomContent.classList.toggle('active');
+        contentContainer[0].classList.toggle('active');
+    }
 
     return(
         <div>
@@ -24,7 +26,7 @@ export function NavBarUser(){
                     <li>
                         <DiReact id='logo'/>
                         <span id='titleName'>My PortFolio</span>
-                        <BiMenuAltLeft id='menuBtn'/>
+                        <BiMenuAltLeft id='menuBtn' onClick={menuBtnOnClick}/>
                     </li>
                     <li className="sideBar-item">
                         <a href="/"><BiHomeHeart/><span id='linkName'>Home</span></a>

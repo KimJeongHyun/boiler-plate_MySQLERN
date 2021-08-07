@@ -16,6 +16,7 @@ import Logout from './components/views/User/Logout'
 import RegisterPage from './components/views/RegisterPage/RegisterPage'
 import Board from './components/views/Board/Board'
 import Post from './components/views/Board/Post'
+import BoardFiltered from './components/views/Board/BoardFiltered'
 import PostRecom from './components/views/Board/PostRecom'
 import PostRecomDel from './components/views/Board/PostRecomDel'
 import PostWrite from './components/views/Board/PostWrite'
@@ -50,6 +51,7 @@ function App() {
           <Route path="/logout" component={Auth(Logout,true)}/>
           <Route path="/board/list/:idx" component={Auth(Board)}/>
           <Route path="/post/:idx" component={Auth(Post)}/>
+          <Route path="/board/filtered/:filter/:text" component={Auth(BoardFiltered)}/>
           <Route path="/recommend/:idx" component={Auth(PostRecom,true)}/>
           <Route path="/recommendDel/:idx" component={Auth(PostRecomDel,true)}/>
           <Route path="/write/:idx" component={Auth(PostWrite,true)}/>

@@ -2,12 +2,12 @@ import React,{useEffect,useState} from 'react'
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
-import '../../../css/style.css'
 import {useDispatch} from 'react-redux'
-import {boardView} from '../../../_actions/user_action'
 import {filterSearch} from '../../../_actions/user_action'
 
-function Board(props){
+
+
+function BoardFiltered(props){
     const [Title, setTitle] = useState("")
     const [Rows, setRows] = useState("")
     const [Pagenum, setPagenum] = useState("")
@@ -17,10 +17,32 @@ function Board(props){
     const [Session,setSession] = useState("")
     const [FilterSearch, setFilterSearch] = useState("Title")
     const [TextContent,setTextContent] = useState("")
+
+    const onFilterSearchHandler = (event) =>{
+        setFilterSearch(event.currentTarget.value);
+    }
+
+    const onTextContentHandler = (event) =>{
+        setTextContent(event.currentTarget.value);
+    }
+
+    const sessionValue = (Session) =>{
+        if (typeof Session!=='undefined' || Session==''){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     const dispatch = useDispatch();
 
     useEffect(()=>{
-        dispatch(boardView(props.idx)) // router.get
+        let body={
+            filterSearch:props.filter,
+            textContent:props.text
+        }
+
+        dispatch(filterSearch(body)) // router.get
         .then(response=>{
             const result = response.payload;
             setTitle(result.title);
@@ -31,36 +53,10 @@ function Board(props){
             setLastidx(result.lastidx);
             setSession(result.userName);
         })
+
     },[])
 
-    const onFilterSearchHandler = (event) =>{
-        setFilterSearch(event.currentTarget.value);
-    }
 
-    const onTextContentHandler = (event) =>{
-        setTextContent(event.currentTarget.value);
-    }
-
-    const onSubmitHandler = (event) =>{
-        event.preventDefault();
-        let body={
-            filterSearch:FilterSearch,
-            textContent:TextContent
-        }
-        dispatch(filterSearch(body))
-        .then(response=>{
-        })
-    }
-
-
-    const sessionValue = (Session) =>{
-        if (typeof Session!=='undefined' || Session==''){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
     const postRendering = () =>{
         const result=[];
         if (Page>0){
@@ -139,10 +135,9 @@ function Board(props){
                         <a href={"/write/"+Lastidx} style={{marginTop:"50px"}}><input type="button" value="글 쓰기"/></a>
                     </div>
                 </div>
-                <ScrollTop/>
-            </div>
+            <ScrollTop/>
+        </div>
     )
-    
 }
-//FilterSearch, TextContent
-export default Board
+
+export default BoardFiltered

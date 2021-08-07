@@ -1,4 +1,5 @@
 import React,{useEffect, useState} from 'react'
+import ReactDOM from 'react-dom'
 import {useHistory,useLocation} from 'react-router-dom'
 import axios from 'axios'
 import ScrollTop from '../TopBtn/ScrollTop'
@@ -13,28 +14,72 @@ function LandingPage(props){
     useEffect(()=>{
         axios.get('/api/getSession')
         .then(response=>{
-            setSession(response.data.isAuth);
+            setSession(response.data.ID);
         })
-    },[])
+        const sessionValue = (Session) =>{
+            if (typeof Session!=='undefined' || Session==''){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        const landPageRendering = () =>{
+            const result=[];
+            if (Session){
+                result.push(
+                    <div>
+                        <div className="ContentContainer" id="ContentContainer">
+                            <div className="ContentField">
+                                <div style={{
+                                    display:'flex', flexDirection:'column',
+                                    width:'100%',height:'100vh'
+                                }}>
+                                    <img src={"/imgs/freeimage1.jpg"}></img>
+                                    <br />
+                                    <br />
+                                    <img src={"/imgs/freeimage2.jpg"}></img>
+                                    <ScrollTop/>
+                                </div>
+                            </div>
+                        </div>
+                        <NavBarUser/>
+                    </div>
+                )
+            }else{
+                result.push(
+                    <div>
+                        <div className="ContentContainer" id="ContentContainer">
+                            <div className="ContentField">
+                                <div style={{
+                                    display:'flex', flexDirection:'column',
+                                    width:'100%',height:'100vh'
+                                }}>
+                                    <img src={"/imgs/freeimage1.jpg"}></img>
+                                    <br />
+                                    <br />
+                                    <img src={"/imgs/freeimage2.jpg"}></img>
+                                    <ScrollTop/>
+                                </div>
+                            </div>
+                        </div>
+                        <NavBar/>
+                    </div>
+                )
+            }
+            return result;
+        }
+        ReactDOM.render(landPageRendering(),document.getElementById('divCon'));
+
+
+    },[Session])
 
     
+
+
     return(
-        <div>
-            {Session ? <NavBarUser/> : <NavBar/>}
-            <div className="ContentContainer">
-                <div className="ContentField">
-                    <div style={{
-                        display:'flex', flexDirection:'column',
-                        width:'100%',height:'100vh'
-                    }}>
-                        <img src={"/imgs/freeimage1.jpg"}></img>
-                        <br />
-                        <br />
-                        <img src={"/imgs/freeimage2.jpg"}></img>
-                        <ScrollTop/>
-                    </div>
-                </div>
-            </div>
+        <div id="divCon">
+            
         </div>
     )
 }

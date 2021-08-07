@@ -8,6 +8,7 @@ import {
     PROFILE_USER_EDIT,
     BOARD_VIEW,
     POST_VIEW,
+    FILTER_SEARCH,
     POST_RECOM,
     POST_RECOMDEL,
     POST_WRITE,
@@ -90,6 +91,16 @@ export function postView(props){
 
     return {
         type:POST_VIEW,
+        payload: request
+    }
+}
+
+export function filterSearch(dataToSubmit){
+    const request=axios.post('/api/filterSearch',dataToSubmit)
+    .then(response=>response.data);
+
+    return {
+        type:FILTER_SEARCH,
         payload: request
     }
 }

@@ -14,6 +14,8 @@ export const BOARD_VIEW="board_view";
 
 export const POST_VIEW="post_view";
 
+export const FILTER_SEARCH="filter_search";
+
 export const POST_RECOM="post_recom";
 
 export const POST_RECOMDEL="post_recomdel";
