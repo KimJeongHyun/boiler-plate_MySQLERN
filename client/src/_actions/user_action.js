@@ -11,6 +11,7 @@ import {
     FILTER_SEARCH,
     POST_RECOM,
     POST_RECOMDEL,
+    FILE_UPLOAD,
     POST_WRITE,
     POST_DELETE
 } from './types';
@@ -123,6 +124,21 @@ export function postRecomDel(props){
         type:POST_RECOMDEL,
         payload: request
     }
+}
+
+export function fileUpload(dataToSubmit){
+    const request=axios({
+        method: 'post',
+        url: '/api/upload/',
+        data: dataToSubmit,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    .then(response=>response.data);
+    return {
+        type:FILE_UPLOAD,
+        payload: request
+    }
+
 }
 
 export function postWrite(props,dataToSubmit){

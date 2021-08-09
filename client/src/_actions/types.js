@@ -20,6 +20,8 @@ export const POST_RECOM="post_recom";
 
 export const POST_RECOMDEL="post_recomdel";
 
+export const FILE_UPLOAD="file_upload";
+
 export const POST_WRITE="post_write";
 
 export const POST_DELETE="post_delete";

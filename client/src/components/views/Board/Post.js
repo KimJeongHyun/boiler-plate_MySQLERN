@@ -196,3 +196,21 @@ function Post(props){
 }
 
 export default withRouter(Post);
+
+
+/*
+const [Seen, setSeen] = useState(false);
+const [Temp, setTemp] = useState("");
+const onSetHandler = (event) =>{
+    setTemp(event.target.value)
+}
+
+const onSeenHandler = () =>{
+    setSeen(!Seen);
+}
+
+<button onClick={onSeenHandler}>asdfasdfasdf</button>
+{Seen ? <PopUp toggle={onSeenHandler} inputText={onSetHandler}/> : null}
+<input type="text" value={Temp}></input>
+
+*/

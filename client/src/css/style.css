@@ -68,13 +68,13 @@ header{
     position:relative;
     display:flex;
     width:100%;
-    left:240px;
+    left:230px;
     transition:0.5s ease;
 }
 
 
 .ContentContainer.active {
-    left:45px;
+    left:40px;
     transition: 0.5s ease;
 }
 
@@ -380,3 +380,35 @@ header{
     text-align:center;
     opacity:0.9;
 }
+
+.modal {
+    position: fixed;
+    z-index: 1;
+    width: 80%;
+    height:50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+  
+  .modal_content {
+    background-color: white;
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    width: 40%;
+    padding: 20px;
+    border-radius: 5px;
+    border: 2px solid black;
+  }
+  
+  .close {
+    color: Black;
+    float: right;
+  }
+  
+  .close:hover {
+    color: cyan;
+    cursor: pointer;
+  }

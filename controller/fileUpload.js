@@ -44,22 +44,30 @@ router.get('/fileUploadPage/:idx',(req,res)=>{
     }
 })
 
-router.post('/upload',upload.single('img'),(req,res)=>{
+router.post('/api/upload',upload.single('img'),(req,res)=>{
+    console.log('upload router')
+    console.log(req.file);
     let filePath='';
-    if (req.session.filepath==''){
+    /*if (req.session.filepath==''){
         filePath=req.file.path;
     }else{
         filePath+=req.session.filepath+'+'+req.file.path;
-    }
+    }*/
+    filePath = req.file.path;
     req.session.filepath=filePath;
     if (typeof req.session.displayName!=='undefined'){
         if (typeof req.file=='undefined'){
-            res.send("<script>alert('업로드한 파일이 없습니다.'); window.history.back()</script>")
+            console.log('file undefined')
+            res.json({fileUploadSuccess:false})
+            //res.send("<script>alert('업로드한 파일이 없습니다.'); window.history.back()</script>")
         }else{
-            res.send("<script>alert('업로드 완료.'); window.history.back()</script>")
+            console.log('file exist');
+            res.json({fileUploadSuccess:true})
+            //res.send("<script>alert('업로드 완료.'); window.history.back()</script>")
         }
     }else{
-        res.send("<script>alert('비정상적인 접근입니다.'); document.location.href='/info'</script>")
+        res.json({fileUploadSuccess:false})
+        //res.send("<script>alert('비정상적인 접근입니다.'); document.location.href='/info'</script>")
     }
 })
 

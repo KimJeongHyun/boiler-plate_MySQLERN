@@ -3,18 +3,35 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import {useDispatch} from 'react-redux'
 import ScrollTop from '../TopBtn/ScrollTop'
-import {postWrite} from '../../../_actions/user_action'
+import PopUp from '../Modal/Modal'
+import {postWrite, fileUpload} from '../../../_actions/user_action'
 import NavBarUser from '../NavBar/NavBarUser'
 import { withRouter } from 'react-router-dom';
 
 function PostWrite(props){
+    const [Seen, setSeen] = useState(false);
+    const [FileName, setFileName] = useState("");
+    
+    const onSeenHandler = () =>{
+        setSeen(!Seen);
+    }
+
+
     const dispatch = useDispatch();
 
     const [Title,setTitle] = useState("")
     const [Content,setContent] = useState("")
+    const [File,setFile] = useState("")
     const [ServerRes, setServerRes] = useState()
     const onTitleHandler = (event) =>{
         setTitle(event.currentTarget.value);
+    }
+
+    const onFileHandler = (event) =>{
+        event.preventDefault();
+        let file = event.target.files[0];
+        setFile(file);
+        setFileName(event.target.value.split('\\')[2])
     }
 
     const onContentHandler = (event) =>{
@@ -23,10 +40,19 @@ function PostWrite(props){
 
     const onSubmitHandler = (event) =>{
         event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('img',File);
+
+        dispatch(fileUpload(formData))
+        .then(response=>{
+            
+        })
         let body={
             Title:Title,
             Content:Content
         }
+        
         dispatch(postWrite(props,body))
         .then(response=>{
             if (response.payload.writeSuccess){
@@ -39,6 +65,7 @@ function PostWrite(props){
                 alert('Error!');
             }
         })
+        
     }
 
     useEffect(()=>{
@@ -53,7 +80,7 @@ function PostWrite(props){
                     <NavBarUser/>
                     <div className= "ContentContainer" id="ContentContainer">
                         <div className="ContentField">
-                            <form onSubmit={onSubmitHandler}>
+                            <form onSubmit={onSubmitHandler} encType="multipart/form-data">
                                 <table style={{width:"80vw", height:"80vh", paddingLeft:"50px"}}>
                                     <tr>
                                         <td colSpan="2" style={{height:"10%", paddingTop:"3vh"}}>
@@ -61,10 +88,11 @@ function PostWrite(props){
                                         </td>
                                     </tr>
                                     <tr>
-                                    {/*<td>
-                                        <input type="button" id = "<%=id%>" value="파일 업로드" onClick="openChild(this)"/>
-                                        <span id="sInput" style={{fontSize:"12px"}}></span><a href="/uploadedFileDelete/<%=id%>"><input type="button" tyle="margin-left:20px" value="업로드 취소" onClick="deleteFile()"/></a>
-                                    </td>*/}
+                                        <td>
+                                            <input type="button" defaultValue="파일 업로드" onClick={onSeenHandler}/>
+                                            {Seen ? <PopUp toggle={onSeenHandler} fileHandler={onFileHandler}/> : null}
+                                            <input type="text" value={FileName}></input>
+                                        </td>
                                     </tr>
                                     <tr>
                                     <td colSpan="2" style={{paddingTop:"20px"}}>
@@ -97,8 +125,8 @@ function PostWrite(props){
         }else if (ServerRes==false){
             ReactDOM.render(falseFunc(),document.getElementById('Container'));
         }
-
-    },[ServerRes])
+        console.log(File);
+    },[ServerRes,Seen,Title,Content,File])
 
     return(
         <div id="Container">
