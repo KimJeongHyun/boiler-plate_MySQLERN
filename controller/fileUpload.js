@@ -46,7 +46,6 @@ router.get('/fileUploadPage/:idx',(req,res)=>{
 
 router.post('/api/upload',upload.single('img'),(req,res)=>{
     console.log('upload router')
-    console.log(req.file);
     let filePath='';
     /*if (req.session.filepath==''){
         filePath=req.file.path;

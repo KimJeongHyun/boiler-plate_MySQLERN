@@ -127,11 +127,10 @@ export function postRecomDel(props){
 }
 
 export function fileUpload(dataToSubmit){
-    const request=axios({
-        method: 'post',
-        url: '/api/upload/',
-        data: dataToSubmit,
-        headers: {'Content-Type': 'multipart/form-data' }
+    const request=axios.post('/api/upload',dataToSubmit,{
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
     })
     .then(response=>response.data);
     return {
