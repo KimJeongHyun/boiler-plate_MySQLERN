@@ -11,6 +11,7 @@ import {
     POST_RECOM,
     POST_RECOMDEL,
     FILE_UPLOAD,
+    FILE_DOWNLOAD,
     POST_WRITE,
     POST_DELETE
 } from '../_actions/types'
@@ -52,6 +53,9 @@ export default function (state={}, action){
             break;
         case FILE_UPLOAD:
             return {...state, fileUploadSuccess : action.payload}
+            break;
+        case FILE_UPLOAD:
+            return {...state, fileDownloadSuccess : action.payload}
             break;
         case POST_WRITE:
             return {...state, writeSuccess : action.payload}

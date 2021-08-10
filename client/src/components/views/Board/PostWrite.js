@@ -44,7 +44,7 @@ function PostWrite(props){
         const formData = new FormData();
         formData.append('img',File);
 
-        dispatch(fileUpload(formData))
+        dispatch(fileUpload(props.idx,formData))
         .then(response=>{
             
         })
@@ -53,7 +53,7 @@ function PostWrite(props){
             Content:Content
         }
         
-        dispatch(postWrite(props,body))
+        dispatch(postWrite(props.idx,body))
         .then(response=>{
             if (response.payload.writeSuccess){
                 setServerRes(true);

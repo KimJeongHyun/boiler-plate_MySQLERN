@@ -11,9 +11,11 @@ import { withRouter ,Redirect } from 'react-router-dom';
 
 
 
+
 function Post(props){
     const [Session,setSession] = useState("")
     const [ServerRes,setServerRes] = useState();
+    const dispatch = useDispatch();
 
     useEffect(()=>{
         axios.get('/api/getSession')
@@ -35,20 +37,20 @@ function Post(props){
     const [Imgpaths, setImgpath] = useState("")
     const [Postloc, setPostloc] = useState("")
 
-    const dispatch = useDispatch();
+    
     dispatch(postView(props.idx))
-            .then(response=>{
-                const result = response.payload;
-                if (result.postElement){
-                    setTitle(result.title);
-                    setRows(result.rows);
-                    setFilename(result.fileName);
-                    setImgpath(result.imgPaths);
-                    setPostloc(result.postLoc);
-                    setServerRes(true);
-                }else{
-                    setServerRes(false);
-                }
+    .then(response=>{
+        const result = response.payload;
+        if (result.postElement){
+            setTitle(result.title);
+            setRows(result.rows);
+            setFilename(result.fileName);
+            setImgpath(result.imgPaths);
+            setPostloc(result.postLoc);
+            setServerRes(true);
+        }else{
+            setServerRes(false);
+        }
     })
 
 
@@ -56,7 +58,7 @@ function Post(props){
         const result=[];
         for (let i=0; i<Filename.length; i++){
             result.push(
-                <td key={i} style={{height:"10%"}}><a href={"/fileDownload/"+Rows.idx+"/"+Filename[i]}>{Filename[i]}</a></td>
+                <td key={i} style={{height:"10%"}}><a href={"/fileDownload/"+props.idx+"/"+Filename[i]}>{Filename[i]}</a></td>
             )
         }
         return result;
@@ -199,18 +201,10 @@ export default withRouter(Post);
 
 
 /*
-const [Seen, setSeen] = useState(false);
-const [Temp, setTemp] = useState("");
-const onSetHandler = (event) =>{
-    setTemp(event.target.value)
-}
 
-const onSeenHandler = () =>{
-    setSeen(!Seen);
-}
 
-<button onClick={onSeenHandler}>asdfasdfasdf</button>
-{Seen ? <PopUp toggle={onSeenHandler} inputText={onSetHandler}/> : null}
+<button >asdfasdfasdf</button>
+
 <input type="text" value={Temp}></input>
 
 */

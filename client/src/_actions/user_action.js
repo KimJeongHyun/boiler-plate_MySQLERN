@@ -1,4 +1,6 @@
 import axios from "axios";
+import download from 'js-file-download';
+
 import {
     AUTH_USER,
     LOGIN_USER,
@@ -12,6 +14,7 @@ import {
     POST_RECOM,
     POST_RECOMDEL,
     FILE_UPLOAD,
+    FILE_DOWNLOAD,
     POST_WRITE,
     POST_DELETE
 } from './types';
@@ -96,6 +99,8 @@ export function postView(props){
     }
 }
 
+
+
 export function filterSearch(dataToSubmit){
     const request=axios.post('/api/filterSearch',dataToSubmit)
     .then(response=>response.data);
@@ -126,8 +131,8 @@ export function postRecomDel(props){
     }
 }
 
-export function fileUpload(dataToSubmit){
-    const request=axios.post('/api/upload',dataToSubmit,{
+export function fileUpload(props,dataToSubmit){
+    const request=axios.post('/api/upload/'+props,dataToSubmit,{
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -137,7 +142,17 @@ export function fileUpload(dataToSubmit){
         type:FILE_UPLOAD,
         payload: request
     }
+}
 
+export function fileDownload(idx,name){
+    const request=axios.get('/api/fileDownload/'+idx+'/'+name,{responseType:'blob'})
+    .then(response=>{
+        download(response.data,name)
+    });
+    return{
+        type:FILE_DOWNLOAD,
+        payload: request
+    }
 }
 
 export function postWrite(props,dataToSubmit){

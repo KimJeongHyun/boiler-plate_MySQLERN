@@ -44,9 +44,10 @@ router.get('/fileUploadPage/:idx',(req,res)=>{
     }
 })
 
-router.post('/api/upload',upload.single('img'),(req,res)=>{
+router.post('/api/upload/:idx',upload.single('img'),(req,res)=>{
     console.log('upload router')
     let filePath='';
+    const idx = req.params.idx;
     /*if (req.session.filepath==''){
         filePath=req.file.path;
     }else{
@@ -54,6 +55,31 @@ router.post('/api/upload',upload.single('img'),(req,res)=>{
     }*/
     filePath = req.file.path;
     req.session.filepath=filePath;
+
+    conn.getConnection((err,connection) => {
+        if (err) throw err;
+        
+        const selQuery = 'SELECT uploadfilepath FROM board WHERE idx=?';
+
+        connection.query(selQuery,[idx],(err,rows)=>{
+            if (err) throw err;
+            if (rows.length>0){
+                filePath = rows.uploadfilepath +'+'+ filePath;
+                const updateQuery = 'UPDATE board SET uploadfilepath=? WHERE idx=?';
+                connection.query(updateQuery,[filePath,idx],(err,rows)=>{
+                    if (err) throw err;
+                    connection.release();
+                })
+            }else{
+                const updateQuery = 'UPDATE board SET uploadfilepath=? WHERE idx=?';
+                connection.query(updateQuery,[filePath,idx],(err,rows)=>{
+                    if (err) throw err;
+                    connection.release();
+                })
+            }
+        })
+    })
+
     if (typeof req.session.displayName!=='undefined'){
         if (typeof req.file=='undefined'){
             console.log('file undefined')
@@ -68,6 +94,7 @@ router.post('/api/upload',upload.single('img'),(req,res)=>{
         res.json({fileUploadSuccess:false})
         //res.send("<script>alert('비정상적인 접근입니다.'); document.location.href='/info'</script>")
     }
+
 })
 
 router.get('/uploadedFileDelete/:idx',(req,res)=>{

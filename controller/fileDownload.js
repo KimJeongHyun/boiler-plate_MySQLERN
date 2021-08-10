@@ -11,7 +11,7 @@ router.get('/fileDownload/',(req,res)=>{
     res.send("<script>alert('비정상적인 접근입니다.'); window.history.back()</script>")
 })
 
-router.get('/fileDownload/:idx/:name/',(req,res)=>{
+router.get('/api/fileDownload/:idx/:name/',(req,res)=>{
     const postIdx = req.params.idx;
     let fileName = '';
     let fileList = '';

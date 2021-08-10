@@ -21,7 +21,7 @@ export default function (SpecificComponent, option, adminRoute = null){
             })
         },[])
 
-        return <SpecificComponent idx={props.match.params.idx} filter={props.match.params.filter} text={props.match.params.text}/>
+        return <SpecificComponent idx={props.match.params.idx} filter={props.match.params.filter} text={props.match.params.text} name={props.match.params.name}/>
     }
     return AuthenticationCheck
 }

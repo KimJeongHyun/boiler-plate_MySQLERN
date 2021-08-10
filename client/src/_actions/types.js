@@ -22,6 +22,8 @@ export const POST_RECOMDEL="post_recomdel";
 
 export const FILE_UPLOAD="file_upload";
 
+export const FILE_DOWNLOAD="file_download"
+
 export const POST_WRITE="post_write";
 
 export const POST_DELETE="post_delete";

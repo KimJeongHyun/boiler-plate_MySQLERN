@@ -1,6 +1,5 @@
 import React,{useEffect, useState} from 'react'
 import ReactDOM from 'react-dom'
-import {useHistory,useLocation} from 'react-router-dom'
 import axios from 'axios'
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
@@ -16,13 +15,6 @@ function LandingPage(props){
         .then(response=>{
             setSession(response.data.ID);
         })
-        const sessionValue = (Session) =>{
-            if (typeof Session!=='undefined' || Session==''){
-                return true;
-            }else{
-                return false;
-            }
-        }
 
         const landPageRendering = () =>{
             const result=[];
