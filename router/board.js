@@ -59,6 +59,7 @@ router.get('/api/post/:page',function(req,res,next){
             case '.gif':
             case '.bmp':
             case '.png':
+            case '.PNG':
             case '.tif':
             case '.tiff':
               return true;
@@ -72,11 +73,11 @@ router.get('/api/post/:page',function(req,res,next){
               imgFilePath = rows[0].uploadfilepath.split('+');
               imgFilePath=imgFilePath.filter((element)=>checkExt(element));
               for (let i=0; i<imgFilePath.length; i++){
-                imgFilePath[i] = imgFilePath[i].slice(7);
+                imgFilePath[i] = imgFilePath[i].slice(14);
               }
               fileArray = rows[0].uploadfilepath.split('+');
               for (let i=0; i<fileArray.length; i++){
-                fileArray[i] = fileArray[i].split('\\')[2].split(';')[3];
+                fileArray[i] = fileArray[i].split('\\')[3].split(';')[3];
               }
               resolve('file string work clear');
             }else{

@@ -44,27 +44,28 @@ function PostWrite(props){
         const formData = new FormData();
         formData.append('img',File);
 
-        dispatch(fileUpload(props.idx,formData))
-        .then(response=>{
-            
-        })
+        
         let body={
             Title:Title,
             Content:Content
         }
-        
-        dispatch(postWrite(props.idx,body))
+        dispatch(fileUpload(props.idx,formData))
         .then(response=>{
-            if (response.payload.writeSuccess){
-                setServerRes(true);
-                props.history.push({
-                    pathname:"/board/list/1"
-                });
-            }else{
-                setServerRes(false);
-                alert('Error!');
-            }
+            dispatch(postWrite(props.idx,body))
+            .then(response=>{
+                if (response.payload.writeSuccess){
+                    setServerRes(true);
+                    props.history.push({
+                        pathname:"/board/list/1"
+                    });
+                }else{
+                    setServerRes(false);
+                    alert('Error!');
+                }
+            })
         })
+        
+        
         
     }
 

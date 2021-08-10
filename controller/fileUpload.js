@@ -9,7 +9,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
     destination: (req,file,cb) =>{
-        cb(null, "public/uploadedFiles/");
+        cb(null, "client/public/uploadedFiles/");
     },
     filename(req,file,cb) {
         const idxArray = req.headers.referer.split('/');
@@ -54,31 +54,22 @@ router.post('/api/upload/:idx',upload.single('img'),(req,res)=>{
         filePath+=req.session.filepath+'+'+req.file.path;
     }*/
     filePath = req.file.path;
-    req.session.filepath=filePath;
 
-    conn.getConnection((err,connection) => {
-        if (err) throw err;
-        
-        const selQuery = 'SELECT uploadfilepath FROM board WHERE idx=?';
-
-        connection.query(selQuery,[idx],(err,rows)=>{
-            if (err) throw err;
-            if (rows.length>0){
-                filePath = rows.uploadfilepath +'+'+ filePath;
-                const updateQuery = 'UPDATE board SET uploadfilepath=? WHERE idx=?';
-                connection.query(updateQuery,[filePath,idx],(err,rows)=>{
-                    if (err) throw err;
-                    connection.release();
-                })
+    conn.getConnection((err,connection)=>{
+        const selQuery = 'SELECT MAX(idx) AS LastID FROM board'
+        connection.query(selQuery,(err,rows)=>{
+            if (idx>rows[0].LastID){
+                req.session.filepath = filePath;
             }else{
-                const updateQuery = 'UPDATE board SET uploadfilepath=? WHERE idx=?';
-                connection.query(updateQuery,[filePath,idx],(err,rows)=>{
-                    if (err) throw err;
-                    connection.release();
+                const selQuery2 = 'SELECT uploadfilepath FROM board WHERE idx=?'
+                connection.query(selQuery2,[idx],(err,rows)=>{
+                    req.session.filepath = rows[0].uploadfilepath + '+' + filePath;
                 })
             }
         })
     })
+
+    req.session.filepath = filePath;
 
     if (typeof req.session.displayName!=='undefined'){
         if (typeof req.file=='undefined'){

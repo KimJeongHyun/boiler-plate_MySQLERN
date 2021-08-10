@@ -68,7 +68,7 @@ function Post(props){
 
         for (let i=0; i<Imgpaths.length; i++){
             result.push(
-                <td key={i} id= 'imgs' style={{height:"10%", hidden:"true"}}><img src={"../../../"+Imgpaths[i]}/></td>
+                <td key={i} style={{height:"10%"}}><img src={"/"+Imgpaths[i]} id= 'imgs'  hidden/></td>
             )
         }
         return result; 
@@ -110,22 +110,19 @@ function Post(props){
         
     }
 
+    const imgShowClick = () =>{
+        document.getElementById('imageHideBtn').removeAttribute('hidden');
+        document.getElementById('imageShowBtn').setAttribute('hidden','');
+        document.getElementById('imgs').removeAttribute('hidden');
+    }
+
+    const imgHideClick = () =>{
+        document.getElementById('imageShowBtn').removeAttribute('hidden');
+        document.getElementById('imageHideBtn').setAttribute('hidden','hidden');
+        document.getElementById('imgs').setAttribute('hidden','');
+    }
+
     useEffect(()=>{
-        let imageShowBtn = document.getElementById('imageShowBtn');
-        let imageHideBtn = document.getElementById('imageHideBtn');
-        if (imageShowBtn!==null && imageHideBtn!==null){
-            imageShowBtn.addEventListener('click',function(){
-                document.getElementById('imageShowBtn').setAttribute('hidden','hidden');
-                document.getElementById('imageHideBtn').removeAttribute('hidden');
-                document.getElementById('imgs').removeAttribute('hidden');
-            })
-    
-            imageHideBtn.addEventListener('click', function(){
-                document.getElementById('imageShowBtn').removeAttribute('hidden');
-                document.getElementById('imageHideBtn').setAttribute('hidden','hidden');
-                document.getElementById('imgs').setAttribute('hidden','hidden');
-            })
-        }
 
         const trueFunc = () =>{
             return(
@@ -150,8 +147,8 @@ function Post(props){
                                     </tr>
                                     <tr>
                                     <td>
-                                        <input type="button" id="imageShowBtn" value="첨부된 이미지 보기"/>
-                                        <input type="button" id="imageHideBtn" value="이미지 닫기" hidden/>
+                                        <input type="button" id="imageShowBtn" value="첨부된 이미지 보기" onClick={imgShowClick}/>
+                                        <input type="button" id="imageHideBtn" value="이미지 닫기" onClick={imgHideClick} hidden/>
                                     </td>    
                                 </tr>
                                 </thead>

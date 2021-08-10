@@ -33,12 +33,12 @@ router.get('/api/fileDownload/:idx/:name/',(req,res)=>{
         return new Promise(function(resolve,reject){
             fileList = fileList.split('+');
             for (let i=0; i<fileList.length; i++){
-                fileList[i]=fileList[i].split('\\')[2];
+                fileList[i]=fileList[i].split('\\')[3];
                 if (fileList[i].includes(fileName)){
                     fileName = fileList[i];
                 }
             }
-            let dir = __dirname+'\\..\\public\\uploadedFiles'; 
+            let dir = __dirname+'\\..\\client\\public\\uploadedFiles'; 
             fs.readdir(dir,(err,data)=>{
                 if (err) throw err;
                 data.forEach((item,i)=>{
