@@ -14,7 +14,13 @@ const storage = multer.diskStorage({
     filename(req,file,cb) {
         const idxArray = req.headers.referer.split('/');
         const idx = idxArray[idxArray.length-1];
-        cb(null, idx+';'+req.session.displayName+`;${Date.now()};${file.originalname}`);
+        if (file.originalname=='blob'){
+            const type = "."+file.mimetype.split('/')[1]
+            cb(null, idx+';'+req.session.displayName+`;${Date.now()};${file.originalname}${type}`);
+        }else{
+            cb(null, idx+';'+req.session.displayName+`;${Date.now()};${file.originalname}`);
+        }
+        
     }
 })
 
@@ -53,7 +59,13 @@ router.post('/api/upload/:idx',upload.single('img'),(req,res)=>{
     }else{
         filePath+=req.session.filepath+'+'+req.file.path;
     }*/
-    filePath = req.file.path;
+    console.log(req.file);
+    if (req.file==undefined){
+        filePath = ''
+    }else{
+        filePath=req.file.path;
+    }
+    
 
     conn.getConnection((err,connection)=>{
         const selQuery = 'SELECT MAX(idx) AS LastID FROM board'
@@ -74,7 +86,7 @@ router.post('/api/upload/:idx',upload.single('img'),(req,res)=>{
     if (typeof req.session.displayName!=='undefined'){
         if (typeof req.file=='undefined'){
             console.log('file undefined')
-            res.json({fileUploadSuccess:false})
+            res.json({fileUploadSuccess:true})
             //res.send("<script>alert('업로드한 파일이 없습니다.'); window.history.back()</script>")
         }else{
             console.log('file exist');

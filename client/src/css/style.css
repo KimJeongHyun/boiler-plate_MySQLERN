@@ -412,3 +412,7 @@ header{
     color: cyan;
     cursor: pointer;
   }
+
+  [contentEditable=true]:empty:not(:focus):before{
+    content:attr(data-text)
+}

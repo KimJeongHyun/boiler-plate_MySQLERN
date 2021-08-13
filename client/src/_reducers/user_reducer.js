@@ -54,7 +54,7 @@ export default function (state={}, action){
         case FILE_UPLOAD:
             return {...state, fileUploadSuccess : action.payload}
             break;
-        case FILE_UPLOAD:
+        case FILE_DOWNLOAD:
             return {...state, fileDownloadSuccess : action.payload}
             break;
         case POST_WRITE:

@@ -14,6 +14,7 @@ router.get('/board/list',function (req,res,next) {
 
 router.get('/api/board/list/:page', function(req, res, next) {
   const page = req.params.page;
+  console.log('board is running');
   req.session.refresh = true;
   const sql = 'SELECT idx, nick, title, content, hit FROM board ORDER BY idx DESC'; // 페이징 포스트가 최근 작성된 것부터 보이도록 DESC 처리.
   conn.getConnection((err,connection)=>{
@@ -166,6 +167,8 @@ router.post('/api/write/:idx',(req,res)=>{
     const title = req.body.Title;
     const content = req.body.Content;
     const author = req.session.displayName;
+    const divContent = req.body.DivContent;
+    console.log(req.body.DivContent);
     let filepath = '';
     if (typeof req.session.filepath=='undefined'){
       filepath=null;

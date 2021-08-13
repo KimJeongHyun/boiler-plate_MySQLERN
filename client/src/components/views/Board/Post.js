@@ -16,42 +16,12 @@ function Post(props){
     const [Session,setSession] = useState("")
     const [ServerRes,setServerRes] = useState();
     const dispatch = useDispatch();
-
-    useEffect(()=>{
-        axios.get('/api/getSession')
-        .then(response=>{
-            setSession(response.data);
-        })
-    },[])
-
-    const sessionValue = (Session) =>{
-        if (Session.length>0){
-            return true;
-        }else{
-            return false;
-        }
-    }
+    
     const [Title, setTitle] = useState("")
     const [Rows, setRows] = useState("")
     const [Filename, setFilename] = useState("")
     const [Imgpaths, setImgpath] = useState("")
     const [Postloc, setPostloc] = useState("")
-
-    
-    dispatch(postView(props.idx))
-    .then(response=>{
-        const result = response.payload;
-        if (result.postElement){
-            setTitle(result.title);
-            setRows(result.rows);
-            setFilename(result.fileName);
-            setImgpath(result.imgPaths);
-            setPostloc(result.postLoc);
-            setServerRes(true);
-        }else{
-            setServerRes(false);
-        }
-    })
 
 
     const filenameRendering = () => {
@@ -73,7 +43,7 @@ function Post(props){
         }
         return result; 
     }
-
+    
     const tablefootRendering = () =>{
         const result=[];
         if (Postloc === 'Guest'){
@@ -110,25 +80,54 @@ function Post(props){
         
     }
 
-    const imgShowClick = () =>{
-        document.getElementById('imageHideBtn').removeAttribute('hidden');
-        document.getElementById('imageShowBtn').setAttribute('hidden','');
-        document.getElementById('imgs').removeAttribute('hidden');
-    }
-
-    const imgHideClick = () =>{
-        document.getElementById('imageShowBtn').removeAttribute('hidden');
-        document.getElementById('imageHideBtn').setAttribute('hidden','hidden');
-        document.getElementById('imgs').setAttribute('hidden','');
-    }
-
+    
+    
     useEffect(()=>{
-
+        const strToHTML = (str) =>{
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(str,'text/html')
+            const element = doc.body.childNodes
+            return element;
+        }
+        
+        const imgShowClick = () =>{
+            document.getElementById('imageHideBtn').removeAttribute('hidden');
+            document.getElementById('imageShowBtn').setAttribute('hidden','');
+            if (document.getElementById('imgs')!=undefined){
+                document.getElementById('imgs').removeAttribute('hidden');
+            }
+        }
+    
+        const imgHideClick = () =>{
+            document.getElementById('imageShowBtn').removeAttribute('hidden');
+            document.getElementById('imageHideBtn').setAttribute('hidden','hidden');
+            if (document.getElementById('imgs')!=undefined){
+                document.getElementById('imgs').setAttribute('hidden','');
+            }
+        }
+        axios.get('/api/getSession')
+        .then(response=>{
+            setSession(response.data.isAuth);
+        })
+        dispatch(postView(props.idx))
+        .then(response=>{
+            const result = response.payload;
+            if (result.postElement){
+                setTitle(result.title);
+                setRows(result.rows);
+                setFilename(result.fileName);
+                setImgpath(result.imgPaths);
+                setPostloc(result.postLoc);
+                setServerRes(true);
+            }else{
+                setServerRes(false);
+            }
+        })
         const trueFunc = () =>{
             return(
             <div>
                 <div>
-                    {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
+                    {Session ? <NavBarUser/> : <NavBar/>}
                     <div className= "ContentContainer" id="ContentContainer">
                         <div className="ContentField">
                             <table style={{width:"80vw", height:"80vw", paddingLeft:"50px"}}>
@@ -154,7 +153,9 @@ function Post(props){
                                 </thead>
                                 <tbody>
                                     <tr style={{height:"100%"}}>
-                                        <td colSpan={Filename.length} style={{verticalAlign:"top", paddingTop:"20px"}}>{Rows.content}</td>
+                                        <td id='contentDiv' colSpan={Filename.length} style={{verticalAlign:"top", paddingTop:"20px"}}>
+                                            
+                                        </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -179,7 +180,13 @@ function Post(props){
             )
         }
         if (ServerRes==true){
-            ReactDOM.render(trueFunc(),document.getElementById('Container'));
+            const totalRender = async() =>{
+                await ReactDOM.render(trueFunc(),document.getElementById('Container'))
+                for (let i=0; i<strToHTML(Rows.content).length; i++){
+                    document.getElementById('contentDiv').appendChild(strToHTML(Rows.content)[i])
+                }
+            }
+            totalRender()
         }else if (ServerRes==false){
             ReactDOM.render(falseFunc(),document.getElementById('Container'));
         }

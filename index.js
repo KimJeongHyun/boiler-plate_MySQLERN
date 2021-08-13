@@ -31,7 +31,7 @@ const MySQLStore = require('express-mysql-session')(session);
 app.use(session({
     secret              : configF.secret,
     resave              : false,
-    saveUninitialized   : true,
+    saveUninitialized   : false,
     secure              : true,
     HttpOnly            : true,
     store               : new MySQLStore({
@@ -46,8 +46,8 @@ app.use(session({
 
 const port = 5000;
 
-app.use(express.json()); 
-app.use(express.urlencoded({extended : true})) 
+app.use(express.json({limit:'50mb'})); 
+app.use(express.urlencoded({limit:'50mb',extended : true})) 
 
 // HTML 경로 라우터
 app.use(userRouter);

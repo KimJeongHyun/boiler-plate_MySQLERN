@@ -11,22 +11,45 @@ import { withRouter } from 'react-router-dom';
 function PostWrite(props){
     const [Seen, setSeen] = useState(false);
     const [FileName, setFileName] = useState("");
-    
+    const ref = React.useRef();
     const onSeenHandler = () =>{
         setSeen(!Seen);
     }
 
+    const onFileNameHandler = (event) =>{
+        setFileName(event.currentTarget.value)
+    }
 
     const dispatch = useDispatch();
 
     const [Title,setTitle] = useState("")
     const [Content,setContent] = useState("")
+    const [DivContent,setDivContent] = useState(" ")
     const [File,setFile] = useState("")
     const [ServerRes, setServerRes] = useState()
     const onTitleHandler = (event) =>{
         setTitle(event.currentTarget.value);
     }
 
+    const onDivContentHandler = (event) =>{
+        const divC = document.getElementById('contentDiv')
+        const formData = new FormData();
+        console.log(divC.getElementsByTagName('img'))
+        if (divC.getElementsByTagName('img').length>0){
+            fetch(divC.getElementsByTagName('img')[0].currentSrc)
+            .then(res=>res.blob())
+            .then(blob=>{
+                    blob.lastModifiedData = new Date()
+                    blob.name = 'hello.jpeg'
+                    console.log(blob)
+                    formData.append('img',blob,blob.name) // blob name 랜덤하게 주기.
+                    //dispatch(fileUpload(props.idx,formData))
+                }
+            )
+        }
+        setDivContent(divC.innerHTML)
+        //console.log(divC.getElementsByTagName('span')[0].innerText) setContent에서, 그냥 content에 태그 달린거 넣으면 안됨?
+    }
     const onFileHandler = (event) =>{
         event.preventDefault();
         let file = event.target.files[0];
@@ -37,7 +60,7 @@ function PostWrite(props){
     const onContentHandler = (event) =>{
         setContent(event.currentTarget.value);
     }
-
+    
     const onSubmitHandler = (event) =>{
         event.preventDefault();
 
@@ -47,7 +70,7 @@ function PostWrite(props){
         
         let body={
             Title:Title,
-            Content:Content
+            Content:DivContent
         }
         dispatch(fileUpload(props.idx,formData))
         .then(response=>{
@@ -70,6 +93,7 @@ function PostWrite(props){
     }
 
     useEffect(()=>{
+        
         axios.get('/api/getSession')
         .then(response=>{
             setServerRes(response.data.isAuth);
@@ -92,13 +116,14 @@ function PostWrite(props){
                                         <td>
                                             <input type="button" defaultValue="파일 업로드" onClick={onSeenHandler}/>
                                             {Seen ? <PopUp toggle={onSeenHandler} fileHandler={onFileHandler}/> : null}
-                                            <input type="text" value={FileName}></input>
+                                            <input type="text" value={FileName} onChange={onFileNameHandler}></input>
                                         </td>
                                     </tr>
                                     <tr>
-                                    <td colSpan="2" style={{paddingTop:"20px"}}>
-                                        <textarea style={{border:"none", width:"100%", height:"100%", paddingTop:"20px", fontSize:"1.3em"}} value={Content} placeholder="내용을 작성해주세요!" onChange={onContentHandler} required ></textarea>
-                                    </td>
+                                        <td colSpan="2" style={{paddingTop:"20px"}}>
+                                            <div style={{border:"none", width:"100%", height:"500px",maxHeight:"500px", paddingTop:"20px", fontSize:"1.3em"}} id='contentDiv' onInput={onDivContentHandler} contentEditable='true'>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                     <td colSpan="2" style={{textAlign:"right"}}>
@@ -126,8 +151,7 @@ function PostWrite(props){
         }else if (ServerRes==false){
             ReactDOM.render(falseFunc(),document.getElementById('Container'));
         }
-        console.log(File);
-    },[ServerRes,Seen,Title,Content,File])
+    },[ServerRes,Seen,Title,Content,File,DivContent])
 
     return(
         <div id="Container">
