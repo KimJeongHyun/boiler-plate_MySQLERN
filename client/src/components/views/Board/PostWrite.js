@@ -34,14 +34,13 @@ function PostWrite(props){
     const onDivContentHandler = (event) =>{
         const divC = document.getElementById('contentDiv')
         const formData = new FormData();
-        console.log(divC.getElementsByTagName('img'))
+        
         if (divC.getElementsByTagName('img').length>0){
             fetch(divC.getElementsByTagName('img')[0].currentSrc)
             .then(res=>res.blob())
             .then(blob=>{
                     blob.lastModifiedData = new Date()
-                    blob.name = 'hello.jpeg'
-                    console.log(blob)
+                    blob.name = 'hello.'+blob.type.split('/')[1]
                     formData.append('img',blob,blob.name) // blob name 랜덤하게 주기.
                     //dispatch(fileUpload(props.idx,formData))
                 }

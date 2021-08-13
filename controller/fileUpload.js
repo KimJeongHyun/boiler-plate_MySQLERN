@@ -14,13 +14,7 @@ const storage = multer.diskStorage({
     filename(req,file,cb) {
         const idxArray = req.headers.referer.split('/');
         const idx = idxArray[idxArray.length-1];
-        if (file.originalname=='blob'){
-            const type = "."+file.mimetype.split('/')[1]
-            cb(null, idx+';'+req.session.displayName+`;${Date.now()};${file.originalname}${type}`);
-        }else{
-            cb(null, idx+';'+req.session.displayName+`;${Date.now()};${file.originalname}`);
-        }
-        
+        cb(null, idx+';'+req.session.displayName+`;${Date.now()};${file.originalname}`);       
     }
 })
 
@@ -59,7 +53,7 @@ router.post('/api/upload/:idx',upload.single('img'),(req,res)=>{
     }else{
         filePath+=req.session.filepath+'+'+req.file.path;
     }*/
-    console.log(req.file);
+    console.log(req.file.originalname);
     if (req.file==undefined){
         filePath = ''
     }else{

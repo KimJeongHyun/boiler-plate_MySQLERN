@@ -182,9 +182,8 @@ function Post(props){
         if (ServerRes==true){
             const totalRender = async() =>{
                 await ReactDOM.render(trueFunc(),document.getElementById('Container'))
-                for (let i=0; i<strToHTML(Rows.content).length; i++){
-                    document.getElementById('contentDiv').appendChild(strToHTML(Rows.content)[i])
-                }
+                document.getElementById('contentDiv').append(strToHTML(Rows.content))
+                
             }
             totalRender()
         }else if (ServerRes==false){
