@@ -28,3 +28,4 @@ export const POST_WRITE="post_write";
 
 export const POST_DELETE="post_delete";
 
+export const ADD_COMMENT="add_comment"

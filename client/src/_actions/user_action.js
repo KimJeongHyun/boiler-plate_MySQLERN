@@ -10,6 +10,7 @@ import {
     PROFILE_USER_EDIT,
     BOARD_VIEW,
     POST_VIEW,
+    ADD_COMMENT,
     FILTER_SEARCH,
     POST_RECOM,
     POST_RECOMDEL,
@@ -99,6 +100,15 @@ export function postView(props){
     }
 }
 
+export function addComment(props,dataToSubmit){
+    const request=axios.post('/api/comment/'+props)
+    .then(response=>response.data);
+
+    return {
+        type:POST_VIEW,
+        payload: request
+    }
+}
 
 
 export function filterSearch(dataToSubmit){
