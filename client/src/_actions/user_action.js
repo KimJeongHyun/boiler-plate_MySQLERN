@@ -101,11 +101,11 @@ export function postView(props){
 }
 
 export function addComment(props,dataToSubmit){
-    const request=axios.post('/api/comment/'+props)
+    const request=axios.post('/api/comment/'+props,dataToSubmit)
     .then(response=>response.data);
 
     return {
-        type:POST_VIEW,
+        type:ADD_COMMENT,
         payload: request
     }
 }

@@ -301,11 +301,10 @@ router.post('/api/comment/:idx',(req,res) =>{
   const idx = req.params.idx;
   const author = req.session.displayName;
   const content = req.body.content;
-
   if (typeof author!=='undefined'){
     conn.getConnection((err,connection)=>{
       if (err) throw err;
-      const sql = 'INSERT INTO board (author,content,regdate,postidx) VALUES(?,?,NOW(),?)'
+      const sql = 'INSERT INTO comments (author,content,regdate,postidx) VALUES(?,?,NOW(),?)'
       connection.query(sql,[author,content,idx],(err,rows)=>{
         if (err) throw err;
         res.json({commentSuccess:true})
@@ -315,8 +314,6 @@ router.post('/api/comment/:idx',(req,res) =>{
   }else{
     res.json({commentSuccess:false})
   }
-
-
 })
 
 router.get('/api/board/delete/:idx',(req,res)=>{

@@ -1,4 +1,5 @@
 import React,{useEffect,useState} from 'react'
+import { useHistory } from 'react-router'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
 import ScrollTop from '../TopBtn/ScrollTop'
@@ -6,7 +7,7 @@ import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
 import '../../../css/style.css'
 import {useDispatch} from 'react-redux'
-import {postView} from '../../../_actions/user_action'
+import {addComment,postView} from '../../../_actions/user_action'
 import { withRouter ,Redirect } from 'react-router-dom';
 
 
@@ -23,6 +24,28 @@ function Post(props){
     const [Imgpaths, setImgpath] = useState("")
     const [Postloc, setPostloc] = useState("")
 
+    const [Comment,setComment] = useState("")
+    const history = useHistory()
+    
+    const onCommentHandler = (event) =>{
+        setComment(event.currentTarget.value)
+    }
+
+    const onSubmitHandler = (event) =>{
+        event.preventDefault();
+        let body={
+            content : Comment
+        }
+        dispatch(addComment(props.idx,body))
+        .then(response=>{
+            if (response.payload.commentSuccess){
+                history.go(0)
+            }else{
+                alert('로그인을 해야 댓글을 작성할 수 있습니다.');
+                history.go(0)
+            }
+        })
+    }
 
     const filenameRendering = () => {
         const result=[];
@@ -81,7 +104,6 @@ function Post(props){
     }
 
     
-    
     useEffect(()=>{
         const strToHTML = (str) =>{
             const parser = new DOMParser();
@@ -105,6 +127,8 @@ function Post(props){
                 document.getElementById('imgs').setAttribute('hidden','');
             }
         }
+        
+    
         axios.get('/api/getSession')
         .then(response=>{
             setSession(response.data.isAuth);
@@ -123,6 +147,7 @@ function Post(props){
                 setServerRes(false);
             }
         })
+
         const trueFunc = () =>{
             return(
             <div>
@@ -130,7 +155,7 @@ function Post(props){
                     {Session ? <NavBarUser/> : <NavBar/>}
                     <div className= "ContentContainer" id="ContentContainer">
                         <div className="ContentField">
-                            <table style={{width:"80vw", height:"80vw", paddingLeft:"50px"}}>
+                            <table style={{width:"80vw", height:"30vw",marginTop:"10px", marginLeft:"30px"}}>
                                 <thead>
                                     <tr>
                                         <td colSpan="2" style={{height:"10%"}} ><h1><strong>{Rows.title}</strong></h1></td>
@@ -158,11 +183,25 @@ function Post(props){
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tfoot>
+                                <tfoot id='CommentTfoot'>
+                                    <tr style={{fontSize:'20px'}}>
+                                        댓글
+                                    </tr>
                                     <tr>
-                                        {tablefootRendering()}
+                                        <td colSpan={Filename.length}>
+                                            <form onSubmit={onSubmitHandler}>
+                                                <input type="text" value={Comment} onChange={onCommentHandler} style={{width:'95%',height:'30px',border:'1px solid grey'}} required></input>
+                                                <button type="submit" style={{width:'5%',height:'30px',backgroundColor:'black',color:'white',border:'none'}}>등록</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        댓글 출력하는 곳
                                     </tr>
                                 </tfoot>
+                                <tr>
+                                    {tablefootRendering()}
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -190,7 +229,7 @@ function Post(props){
             ReactDOM.render(falseFunc(),document.getElementById('Container'));
         }
         
-    },[ServerRes])
+    },[ServerRes,Comment])
 
         
     return(
