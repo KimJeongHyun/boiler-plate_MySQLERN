@@ -24,7 +24,6 @@ module.exports = function () {
           }
         })
       },
-
       keepAlive: function (con){
         con.getConnection(function(err, connection){
           if(err) { return; }

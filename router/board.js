@@ -146,10 +146,10 @@ router.get('/api/post/:page',function(req,res,next){
             if (req.session.refresh==true){
               const query = connection.query('UPDATE board SET hit=hit+1 WHERE idx='+page, function(err,rows){
                 if (err) res.json({postElement:false})
-                connection.destroy();
+                connection.end();
               })
             }else{
-              connection.destroy();
+              connection.end();
             }
             req.session.refresh=false;
             resolve('Update hit')
