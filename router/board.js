@@ -14,7 +14,6 @@ router.get('/board/list',function (req,res,next) {
 
 router.get('/api/board/list/:page', function(req, res, next) {
   const page = req.params.page;
-  console.log('board is running');
   req.session.refresh = true;
   const sql = 'SELECT idx, nick, title, content, hit FROM board ORDER BY idx DESC'; // 페이징 포스트가 최근 작성된 것부터 보이도록 DESC 처리.
   conn.getConnection((err,connection)=>{
@@ -37,6 +36,18 @@ router.get('/api/board/list/:page', function(req, res, next) {
   })
 });
 
+router.get('/api/commentView/:page',(req,res)=>{
+  const page = req.params.page;
+  conn.getConnection((err,connection)=>{
+    if (err) res.json({commentElement:false})
+    const sql = 'SELECT author,content FROM comments WHERE postidx=? ORDER BY regdate'
+    const query = connection.query(sql,[page],(err,rows)=>{
+      if (err) res.json({commentElement:false})
+      res.json({commentElement:true, rows:rows})
+    })
+  })
+})
+
 router.get('/api/post/:page',function(req,res,next){
   const page = req.params.page;
   conn.getConnection((err,connection)=>{
@@ -45,6 +56,7 @@ router.get('/api/post/:page',function(req,res,next){
       if (err) {
         res.json({postElement:false})
         reject('SELECT Err');
+        connection.release()
       }
       if (rows.length>0){
         const author = rows[0].name;
@@ -78,7 +90,7 @@ router.get('/api/post/:page',function(req,res,next){
               }
               fileArray = rows[0].uploadfilepath.split('+');
               for (let i=0; i<fileArray.length; i++){
-                fileArray[i] = fileArray[i].split('\\')[3].split(';')[3];
+                fileArray[i] = fileArray[i].split('\\')[2].split(';')[3];
               }
               resolve('file string work clear');
             }else{
@@ -96,6 +108,7 @@ router.get('/api/post/:page',function(req,res,next){
                 res.json({title:rows[0].title, rows:rows[0], fileName:fileArray,imgPaths:imgFilePath,postLoc:'PostUser',postElement:true})
                 //res.render('boardHTML/postUser.html',{title:rows[0].title, rows:rows, fileName:fileArray,imgPaths:imgFilePath});
                 resolve('client is post user');
+                
               }else{
                 const recomSelSql = 'SELECT recomPost FROM users WHERE id=?';
                 const recomSelQuery = connection.query(recomSelSql,[req.session.displayName],(err,rows)=>{
@@ -104,6 +117,7 @@ router.get('/api/post/:page',function(req,res,next){
                     res.json({title:preRows[0].title,rows:preRows[0],fileName:fileArray,imgPaths:imgFilePath,postLoc:'GuestNoRecom',postElement:true});
                     //res.render('boardHTML/postGuest.html',{title:preRows[0].title,rows:preRows,fileName:fileArray,imgPaths:imgFilePath});
                     resolve('client is post guest, recomPost is null.');
+                    
                   }else{
                     const recomPosts = rows[0].recomPost;
                     const recomPostsArray = recomPosts.split(';');
@@ -111,10 +125,12 @@ router.get('/api/post/:page',function(req,res,next){
                       res.json({title:preRows[0].title,rows:preRows[0],fileName:fileArray,imgPaths:imgFilePath,postLoc:'GuestRecom',postElement:true})
                       //res.render('boardHTML/postGuestRecommended.html',{title:preRows[0].title,rows:preRows,fileName:fileArray,imgPaths:imgFilePath});
                       resolve('client is recommended user');
+                      
                     }else{
                       res.json({title:preRows[0].title,rows:preRows[0],fileName:fileArray,imgPaths:imgFilePath,postLoc:'GuestNoRecom',postElement:true})
                       //res.render('boardHTML/postGuest.html',{title:preRows[0].title,rows:preRows,fileName:fileArray,imgPaths:imgFilePath});
                       resolve('client is post guest, post is not included in recomPost');
+                      
                     }
                   }          
                 })
@@ -130,10 +146,10 @@ router.get('/api/post/:page',function(req,res,next){
             if (req.session.refresh==true){
               const query = connection.query('UPDATE board SET hit=hit+1 WHERE idx='+page, function(err,rows){
                 if (err) res.json({postElement:false})
-                connection.release();
+                connection.destroy();
               })
             }else{
-              connection.release();
+              connection.destroy();
             }
             req.session.refresh=false;
             resolve('Update hit')

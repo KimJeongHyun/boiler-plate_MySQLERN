@@ -10,7 +10,8 @@ module.exports = function () {
           port: '3306',
           user: configL.user,
           password: configL.password,
-          database: configL.database
+          database: configL.database,
+          connectionLimit:30
         })
       },
       
@@ -22,7 +23,15 @@ module.exports = function () {
             console.info('mysql is connected successfully.');
           }
         })
-      }
+      },
+
+      keepAlive: function (con){
+        con.getConnection(function(err, connection){
+          if(err) { return; }
+          connection.ping();
+          connection.release();
+        });
+      },
     }
   };
 

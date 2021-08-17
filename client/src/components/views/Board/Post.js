@@ -7,7 +7,7 @@ import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
 import '../../../css/style.css'
 import {useDispatch} from 'react-redux'
-import {addComment,postView} from '../../../_actions/user_action'
+import {addComment,commentView,postView} from '../../../_actions/user_action'
 import { withRouter ,Redirect } from 'react-router-dom';
 
 
@@ -25,6 +25,7 @@ function Post(props){
     const [Postloc, setPostloc] = useState("")
 
     const [Comment,setComment] = useState("")
+    const [CommentRow, setCommentRow] = useState("")
     const history = useHistory()
     
     const onCommentHandler = (event) =>{
@@ -67,6 +68,21 @@ function Post(props){
         return result; 
     }
     
+    const commentRendering = () =>{
+        const result = [];
+        for (let i=0; i<CommentRow.length; i++){
+            result.push(
+                <div>
+                    {CommentRow[i].author}
+                    <br/>
+                    {CommentRow[i].content}
+                    <hr/>
+                </div>
+            )
+        }
+        return result;
+    }
+
     const tablefootRendering = () =>{
         const result=[];
         if (Postloc === 'Guest'){
@@ -99,8 +115,7 @@ function Post(props){
                 </td>
             )
         }
-        return result;
-        
+        return result;   
     }
 
     
@@ -133,6 +148,7 @@ function Post(props){
         .then(response=>{
             setSession(response.data.isAuth);
         })
+
         dispatch(postView(props.idx))
         .then(response=>{
             const result = response.payload;
@@ -148,7 +164,15 @@ function Post(props){
             }
         })
 
-        const trueFunc = () =>{
+        dispatch(commentView(props.idx))
+        .then(response=>{
+            const result = response.payload;
+            if (result.commentElement){
+                setCommentRow(result.rows)
+            }
+        })
+
+        const trueFunc =function trueFunc(){
             return(
             <div>
                 <div>
@@ -183,26 +207,24 @@ function Post(props){
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tfoot id='CommentTfoot'>
-                                    <tr style={{fontSize:'20px'}}>
-                                        댓글
-                                    </tr>
+                                <tfoot>
                                     <tr>
-                                        <td colSpan={Filename.length}>
-                                            <form onSubmit={onSubmitHandler}>
-                                                <input type="text" value={Comment} onChange={onCommentHandler} style={{width:'95%',height:'30px',border:'1px solid grey'}} required></input>
-                                                <button type="submit" style={{width:'5%',height:'30px',backgroundColor:'black',color:'white',border:'none'}}>등록</button>
-                                            </form>
+                                        <td id="commentInputID">
+                                            
                                         </td>
                                     </tr>
                                     <tr>
-                                        댓글 출력하는 곳
+                                        <td id="commentID">
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        {tablefootRendering()}
                                     </tr>
                                 </tfoot>
-                                <tr>
-                                    {tablefootRendering()}
-                                </tr>
                             </table>
+                            <div id="commentID">
+                            </div>
                         </div>
                     </div>
                     <ScrollTop/>
@@ -210,8 +232,7 @@ function Post(props){
             </div>
             )
         }
-
-        const falseFunc = () =>{
+        const falseFunc = function(){
             return(
                 <div>
                     {alert('존재하지 않는 포스트입니다.',props.history.push('/board/list/1'))}
@@ -221,17 +242,36 @@ function Post(props){
         if (ServerRes==true){
             const totalRender = async() =>{
                 await ReactDOM.render(trueFunc(),document.getElementById('Container'))
-                document.getElementById('contentDiv').append(strToHTML(Rows.content))
+                if (document.getElementById('contentDiv').childNodes.length==0){
+                    document.getElementById('contentDiv').append(strToHTML(Rows.content))  
+                }
                 
             }
             totalRender()
         }else if (ServerRes==false){
-            ReactDOM.render(falseFunc(),document.getElementById('Container'));
+            ReactDOM.render(falseFunc(),document.getElementById('Container'))
         }
         
-    },[ServerRes,Comment])
+    },[ServerRes])
 
-        
+    if (!(document.getElementById('commentInputID')==null)){
+        const commentInputFunc = () => {
+            const result = [];
+            result.push(
+                <form onSubmit={onSubmitHandler}>
+                    <input type="text" value={Comment} onChange={onCommentHandler} style={{width:'95%',height:'30px',border:'1px solid grey'}} required></input>
+                    <button type="submit" style={{width:'5%',height:'30px',backgroundColor:'black',color:'white',border:'none'}}>등록</button>
+                </form>
+            )
+            return result;
+        }
+        ReactDOM.render(commentInputFunc(),document.getElementById('commentInputID'))
+    }
+    
+    if (!(document.getElementById('commentID')==null)){
+        ReactDOM.render(commentRendering(),document.getElementById('commentID'))
+    }
+
     return(
         <div id="Container">
         </div>
@@ -239,7 +279,7 @@ function Post(props){
     
 }
 
-export default withRouter(Post);
+export default withRouter(React.memo(Post));
 
 
 /*

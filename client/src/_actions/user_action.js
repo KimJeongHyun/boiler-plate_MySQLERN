@@ -11,6 +11,7 @@ import {
     BOARD_VIEW,
     POST_VIEW,
     ADD_COMMENT,
+    COMMENT_VIEW,
     FILTER_SEARCH,
     POST_RECOM,
     POST_RECOMDEL,
@@ -110,6 +111,15 @@ export function addComment(props,dataToSubmit){
     }
 }
 
+export function commentView(props){
+    const request=axios.get('/api/commentView/'+props)
+    .then(response=>response.data);
+
+    return {
+        type:COMMENT_VIEW,
+        payload: request
+    }
+}
 
 export function filterSearch(dataToSubmit){
     const request=axios.post('/api/filterSearch',dataToSubmit)

@@ -1,4 +1,6 @@
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,useMemo} from 'react'
+import ReactDOM from 'react-dom'
+import axios from 'axios'
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
@@ -19,20 +21,6 @@ function Board(props){
     const [TextContent,setTextContent] = useState("")
     const dispatch = useDispatch();
 
-    useEffect(()=>{
-        dispatch(boardView(props.idx)) // router.get
-        .then(response=>{
-            const result = response.payload;
-            setTitle(result.title);
-            setRows(result.rows);
-            setPagenum(result.page_num);
-            setPage(result.page);
-            setLength(result.length);
-            setLastidx(result.lastidx);
-            setSession(result.userName);
-        })
-    },[])
-
     const onFilterSearchHandler = (event) =>{
         setFilterSearch(event.currentTarget.value);
     }
@@ -41,17 +29,7 @@ function Board(props){
         setTextContent(event.currentTarget.value);
     }
 
-    const onSubmitHandler = (event) =>{
-        event.preventDefault();
-        let body={
-            filterSearch:FilterSearch,
-            textContent:TextContent
-        }
-        dispatch(filterSearch(body))
-        .then(response=>{
-        })
-    }
-
+    
 
     const sessionValue = (Session) =>{
         if (typeof Session!=='undefined' || Session==''){
@@ -99,50 +77,81 @@ function Board(props){
         return result;
     }
 
-    return(
-        <div>
-            {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
-                <div className= "ContentContainer" id="ContentContainer" style={{top:"50px"}}>
-                    <div className="ContentField" style={{textAlign:"center"}}>
-                        <h1>{Title}</h1>
-                        <table style={{margin:"auto", width:"50%"}}>
-                            <thead>
-                                <tr>
-                                    <th>번호</th>
-                                    <th>제목</th>
-                                    <th>글쓴이</th>
-                                </tr>
-                            </thead>
-                            {
-                                    <tbody>
-                                        {postRendering()}
-                                    </tbody>
+    const mainRendering = () =>{
+        const result=[];
+        result.push(
+            <div>
+                {Session ? <NavBarUser/> : <NavBar/>}
+                    <div className= "ContentContainer" id="ContentContainer" style={{top:"50px"}}>
+                        <div className="ContentField" style={{textAlign:"center"}}>
+                            <h1>{Title}</h1>
+                            <table style={{margin:"auto", width:"50%"}}>
+                                <thead>
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>제목</th>
+                                        <th>글쓴이</th>
+                                    </tr>
+                                </thead>
+                                {
+                                        <tbody>
+                                            {postRendering()}
+                                        </tbody>
+                                    
+                                }
                                 
-                            }
-                            
-                            <tfoot>
-                            <tr>
-                                <td colSpan="3" style={{paddingTop:"30px"}}>
-                                    {footerRendering()}
-                                </td>
-                            </tr>
-                            </tfoot>
-                        </table>
-                        <br/>
-                        <select value={FilterSearch} onChange={onFilterSearchHandler}>
-                            <option value="Title">제목</option>
-                            <option value="Author">작성자</option>
-                            <option value="TitlePContent">제목+내용</option>
-                        </select>
-                        <input value={TextContent} onChange={onTextContentHandler}></input>
-                        <a href={"/board/filtered/"+FilterSearch+"/"+TextContent}><button>검색</button></a>
-                        <a href={"/write/"+Lastidx} style={{marginTop:"50px"}}><input type="button" value="글 쓰기"/></a>
+                                <tfoot>
+                                <tr>
+                                    <td colSpan="3" style={{paddingTop:"30px"}}>
+                                        {footerRendering()}
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <br/>
+                            <select value={FilterSearch} onChange={onFilterSearchHandler}>
+                                <option value="Title">제목</option>
+                                <option value="Author">작성자</option>
+                                <option value="TitlePContent">제목+내용</option>
+                            </select>
+                            <input value={TextContent} onChange={onTextContentHandler}></input>
+                            <a href={"/board/filtered/"+FilterSearch+"/"+TextContent}><button>검색</button></a>
+                            <a href={"/write/"+Lastidx} style={{marginTop:"50px"}}><input type="button" value="글 쓰기"/></a>
+                        </div>
                     </div>
-                </div>
-                <ScrollTop/>
+                    <ScrollTop/>
             </div>
+        )
+        return result;
+    }
+    
+    dispatch(boardView(props.idx)) // router.get
+        .then(response=>{
+            const result = response.payload;
+            setTitle(result.title);
+            setRows(result.rows);
+            setPagenum(result.page_num);
+            setPage(result.page);
+            setLength(result.length);
+            setLastidx(result.lastidx);
+    })
+
+    useEffect(async ()=>{
+        await axios.get('/api/getSession')
+        .then(response=>{
+            setSession(response.data.isAuth);
+        })
+    
+        ReactDOM.render(mainRendering(),document.getElementById('Container'))
+    },[Session])
+
+
+    return(
+        <div id="Container">
+            
+        </div>
     )
     
 }
 //FilterSearch, TextContent
-export default Board
+export default React.memo(Board)
