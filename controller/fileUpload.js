@@ -53,7 +53,6 @@ router.post('/api/upload/:idx',upload.single('img'),(req,res)=>{
     }else{
         filePath+=req.session.filepath+'+'+req.file.path;
     }*/
-    console.log(req.file.originalname);
     if (req.file==undefined){
         filePath = ''
     }else{

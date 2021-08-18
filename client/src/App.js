@@ -20,6 +20,7 @@ import FileDownload from './components/views/Board/FileDownload'
 import BoardFiltered from './components/views/Board/BoardFiltered'
 import PostRecom from './components/views/Board/PostRecom'
 import PostRecomDel from './components/views/Board/PostRecomDel'
+import PostUpdate from './components/views/Board/PostUpdate'
 import PostWrite from './components/views/Board/PostWrite'
 import PostDelete from './components/views/Board/PostDelete'
 import ProfileUser from './components/views/User/ProfileUser'
@@ -56,6 +57,7 @@ function App() {
           <Route path="/board/filtered/:filter/:text" component={Auth(BoardFiltered)}/>
           <Route path="/recommend/:idx" component={Auth(PostRecom,true)}/>
           <Route path="/recommendDel/:idx" component={Auth(PostRecomDel,true)}/>
+          <Route path="/update/:idx" component={Auth(PostUpdate,true)}/>
           <Route path="/write/:idx" component={Auth(PostWrite,true)}/>
           <Route path="/delete/:idx" component={Auth(PostDelete,true)}/>
           <Route path="/myProfile" component={Auth(ProfileUser,true)}/>

@@ -17,6 +17,7 @@ import {
     FILTER_SEARCH,
     POST_RECOM,
     POST_RECOMDEL,
+    POST_UPDATE,
     FILE_UPLOAD,
     FILE_DOWNLOAD,
     POST_WRITE,
@@ -162,6 +163,16 @@ export function postRecomDel(props){
 
     return {
         type:POST_RECOMDEL,
+        payload: request
+    }
+}
+
+export function postUpdate(props,dataToSubmit){
+    const request=axios.post('/api/update/'+props,dataToSubmit)
+    .then(response=>response.data);
+
+    return {
+        type:POST_UPDATE,
         payload: request
     }
 }

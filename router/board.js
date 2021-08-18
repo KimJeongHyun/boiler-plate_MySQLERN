@@ -146,10 +146,10 @@ router.get('/api/post/:page',function(req,res,next){
             if (req.session.refresh==true){
               const query = connection.query('UPDATE board SET hit=hit+1 WHERE idx='+page, function(err,rows){
                 if (err) res.json({postElement:false})
-                connection.end();
+                connection.release();
               })
             }else{
-              connection.end();
+              connection.release();
             }
             req.session.refresh=false;
             resolve('Update hit')
@@ -254,10 +254,10 @@ router.get('/board/update/:idx',(req,res)=>{
   })
 })
 
-router.post('/board/update',(req,res)=>{
-  const title = req.body.title;
-  const content = req.body.content;
-  const idx = req.body.idx;
+router.post('/api/update/:idx',(req,res)=>{
+  const title = req.body.Title;
+  const content = req.body.Content;
+  const idx = req.body.Idx;
   let filePath='';
   console.log(req.session.filepath);
   if (typeof req.session.filepath=='undefined' || req.session.filepath==''){
@@ -287,7 +287,8 @@ router.post('/board/update',(req,res)=>{
         const sql = 'UPDATE board SET title=?, content=?, uploadfilepath=?, modidate=NOW() WHERE idx=?'
         connection.query(sql,[title,content,filepath,idx],function(err,rows){
           if (err) reject(err);
-          res.send("<script>alert('작성되었습니다.'); document.location.href='/board/list'</script>")
+          res.json({updateSuccess:true})
+          //res.send("<script>alert('작성되었습니다.'); document.location.href='/board/list'</script>")
           connection.release();
           resolve('Update path in DB');
         })

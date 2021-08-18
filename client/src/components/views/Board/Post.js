@@ -242,10 +242,9 @@ function Post(props){
         if (ServerRes==true){
             const totalRender = async() =>{
                 await ReactDOM.render(trueFunc(),document.getElementById('Container'))
-                if (document.getElementById('contentDiv').childNodes.length==0){
-                    document.getElementById('contentDiv').append(strToHTML(Rows.content))  
+                for (let i=0; i<strToHTML(Rows.content).length; i++){
+                    document.getElementById('contentDiv').append(strToHTML(Rows.content)[i])  
                 }
-                
             }
             totalRender()
         }else if (ServerRes==false){

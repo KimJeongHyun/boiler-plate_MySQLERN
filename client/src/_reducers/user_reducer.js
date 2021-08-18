@@ -7,12 +7,12 @@ import {
     PROFILE_USER_EDIT,
     BOARD_VIEW,
     POST_VIEW,
-    WEATHER_VIEW,
     ADD_COMMENT,
     COMMENT_VIEW,
     FILTER_SEARCH,
     POST_RECOM,
     POST_RECOMDEL,
+    POST_UPDATE,
     FILE_UPLOAD,
     FILE_DOWNLOAD,
     POST_WRITE,
@@ -62,6 +62,9 @@ export default function (state={}, action){
             break;
         case POST_RECOMDEL:
             return {...state, recomDelSuccess : action.payload}
+            break;
+        case POST_UPDATE:
+            return {...state, updateSuccess : action.payload}
             break;
         case FILE_UPLOAD:
             return {...state, fileUploadSuccess : action.payload}
