@@ -1,5 +1,6 @@
 import axios from "axios";
 import download from 'js-file-download';
+import * as config from '../Config'
 
 import {
     AUTH_USER,
@@ -10,6 +11,7 @@ import {
     PROFILE_USER_EDIT,
     BOARD_VIEW,
     POST_VIEW,
+    WEATHER_VIEW,
     ADD_COMMENT,
     COMMENT_VIEW,
     FILTER_SEARCH,
@@ -100,6 +102,19 @@ export function postView(props){
         payload: request
     }
 }
+
+export function weatherView(props){
+    const city = props;
+    const weatherKey = config.weatherKey;
+    const request=axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weatherKey}`)
+    .then(response=>response.data);
+
+    return {
+        type:WEATHER_VIEW,
+        payload: request
+    }
+}
+
 
 export function addComment(props,dataToSubmit){
     const request=axios.post('/api/comment/'+props,dataToSubmit)

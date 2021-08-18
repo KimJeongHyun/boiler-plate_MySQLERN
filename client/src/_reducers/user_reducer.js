@@ -7,6 +7,7 @@ import {
     PROFILE_USER_EDIT,
     BOARD_VIEW,
     POST_VIEW,
+    WEATHER_VIEW,
     ADD_COMMENT,
     COMMENT_VIEW,
     FILTER_SEARCH,
@@ -43,6 +44,9 @@ export default function (state={}, action){
             break;
         case POST_VIEW:
             return {...state, postElement : action.payload}
+            break;
+        case POST_VIEW:
+            return {...state, weatherSuccess : action.payload}
             break;
         case ADD_COMMENT:
             return {...state, commentSuccess : action.payload}

@@ -4,12 +4,13 @@ import axios from 'axios'
 import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
+import Weather from '../Modal/Weather'
 import '../../../css/style.css'
 
 function LandingPage(props){
 
     const [Session,setSession] = useState("")
-
+    
     useEffect(()=>{
         axios.get('/api/getSession')
         .then(response=>{
@@ -70,9 +71,13 @@ function LandingPage(props){
 
 
     return(
-        <div id="divCon">
+        <div>
+            <div id="divCon">
             
+            </div>
+            <Weather/>
         </div>
+        
     )
 }
 

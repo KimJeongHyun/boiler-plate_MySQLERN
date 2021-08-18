@@ -9,9 +9,11 @@ export function NavBar(){
         let sideBar = document.getElementById('sideMenu');
         let bottomContent = document.getElementById('guestContent');
         let contentContainer = document.getElementsByClassName('ContentContainer');
+        let weatherContainer = document.getElementById('WeatherDiv')
         sideBar.classList.toggle('active');
         bottomContent.classList.toggle('active');
         contentContainer[0].classList.toggle('active');
+        weatherContainer.classList.toggle('active');
     }
 
 
