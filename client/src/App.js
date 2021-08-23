@@ -25,7 +25,6 @@ import PostWrite from './components/views/Board/PostWrite'
 import PostDelete from './components/views/Board/PostDelete'
 import ProfileUser from './components/views/User/ProfileUser'
 import ProfileUserEdit from './components/views/User/ProfileUserEdit'
-import AdminNoticeModal from './components/views/Modal/AdminNoticeModal'
 
 
 function App() {

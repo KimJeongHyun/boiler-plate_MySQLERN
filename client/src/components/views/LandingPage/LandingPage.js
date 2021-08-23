@@ -5,13 +5,20 @@ import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
 import Weather from '../Modal/Weather'
+import AdminNoticeBtn from '../AlarmBtn/AdminNoticeBtn'
+import {AiOutlineNotification} from "react-icons/ai"
+import {GrNotification} from "react-icons/gr"
 
 import '../../../css/style.css'
 
 function LandingPage(props){
-
+    const [Seen, setSeen] = useState(false);
     const [Session,setSession] = useState("")
     
+    const onSeenHandler = () =>{
+        setSeen(!Seen);
+    }
+
     useEffect(()=>{
         axios.get('/api/getSession')
         .then(response=>{
@@ -23,7 +30,9 @@ function LandingPage(props){
             if (Session){
                 result.push(
                     <div>
+                        
                         <div className="ContentContainer" id="ContentContainer">
+                        <a><GrNotification onClick={onSeenHandler} className='alarmNotice'/></a>
                             <div className="ContentField">
                                 <div style={{
                                     display:'flex', flexDirection:'column',
@@ -72,11 +81,13 @@ function LandingPage(props){
 
 
     return(
-        <div style={{zIndex:'2'}}>
+        <div>
             <div id="divCon">
-            
+                
             </div>
-            <Weather/>
+            
+            {Seen ? <AdminNoticeBtn toggle={onSeenHandler}/> : null}
+            <Weather className='weatherCon'/>
         </div>
         
     )

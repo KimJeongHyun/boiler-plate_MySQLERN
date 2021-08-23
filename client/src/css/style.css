@@ -67,7 +67,7 @@ header{
 .ContentContainer{
     position:relative;
     display:flex;
-    width:100%;
+    width:80%;
     left:230px;
     transition:0.5s ease;
 }
@@ -403,22 +403,35 @@ header{
     border: 2px solid black;
 }
 
-.modalNotice {
-    position: absolute;
+.alarmNotice{
+    font-size: 1.8em;
+    position:fixed;
+    left:91%;
+    transition:0.5s ease;
+}
+
+.alarmNotice.active{
+    font-size: 1.8em;
+    position:fixed;
+    left:78%;
+    transition:0.5s ease;
+}
+
+.alarmBtnContainer {
+    position:fixed;
     z-index: 1;
-    margin-left:100px;
-    width:60%;
+    width:30%;
     min-width: 250px;
     height:50%;
-    top:10%;
-    left:20%;
+    top:0%;
+    left:75%;
     display:flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.25);
+    /*background-color: rgba(0, 0, 0, 0.25);*/
   }
   
-.modalNotice_content {
+.alarmBtnContent {
     background-color: white;
     position: absolute;
     top: 20%;
@@ -452,7 +465,7 @@ header{
     width:10%;
     left:90%;
     transition:0.5s ease;
-    margin-top:-40%;
+    top:10%;
 }
 
 

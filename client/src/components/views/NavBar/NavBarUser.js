@@ -1,27 +1,29 @@
-import React, {useEffect,useState} from 'react'
-import { BiChalkboard, BiHomeHeart, BiMenuAltLeft, BiSupport, BiClipboard } from "react-icons/bi";
+import React, {useState,useEffect} from 'react'
+import { BiChalkboard, BiHomeHeart, BiMenuAltLeft, BiSupport, BiClipboard, BiWindows } from "react-icons/bi";
 import { DiReact } from "react-icons/di";
 import { RiLogoutCircleRFill  } from "react-icons/ri";
 import { FaRegUserCircle } from "react-icons/fa";
-import {AiOutlineNotification} from "react-icons/ai"
-import NoticeWrite from '../Modal/AdminNoticeModal'
 
 
 export function NavBarUser(){
-
-    const [Seen, setSeen] = useState(false);
-    const onSeenHandler = () =>{
-        setSeen(!Seen);
-    }
 
     const menuBtnOnClick = () =>{
         let menuBtn = document.getElementById('menuBtn');
         let sideBar = document.getElementById('sideMenu');
         let bottomContent = document.getElementById('guestContent');
         let contentContainer = document.getElementsByClassName('ContentContainer');
+        let alarmBtn = document.getElementsByClassName('alarmNotice');
+        let WeatherDiv = document.getElementById('WeatherDiv')
         sideBar.classList.toggle('active');
         bottomContent.classList.toggle('active');
         contentContainer[0].classList.toggle('active');
+        if (alarmBtn[0]!=null){
+            alarmBtn[0].classList.toggle('active');
+        }
+        
+        if (WeatherDiv!=null){
+            WeatherDiv.classList.toggle('active');
+        }
     }
 
     return(
@@ -49,10 +51,6 @@ export function NavBarUser(){
                         <a href="#"><BiSupport/><span id='linkName'>Support</span></a>
                         <span id='tooltip'>Support</span>
                     </li>
-                    <li className="sideBar-item">
-                        <a onClick={onSeenHandler}><AiOutlineNotification/><span id='linkName'>Alarm</span></a>
-                        <span id='tooltip'>Alarm</span>
-                    </li>
                     <div className="guestContainer">
                         <div className="guestContent" id="guestContent">
                             <a href="/logout" id="functionName"><span id='linkName'>Logout</span><RiLogoutCircleRFill id='linkBtn'/></a>
@@ -61,7 +59,6 @@ export function NavBarUser(){
                         </div> 
                     </div>         
                 </ul>
-                {Seen ? <NoticeWrite toggle={onSeenHandler}/> : null}
             </nav>
          </div>
     )

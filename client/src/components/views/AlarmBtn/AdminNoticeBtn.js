@@ -26,8 +26,8 @@ function AdminNoticeModal(props){
         
     }
     return(
-        <div className="modalNotice">
-        <div className="modalNotice_content">
+        <div className="alarmBtnContainer">
+        <div className="alarmBtnContent">
             <span className="close" onClick={handleClick}>
                 &times;
             </span>
