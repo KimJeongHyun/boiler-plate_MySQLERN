@@ -16,7 +16,8 @@ import {
     FILE_UPLOAD,
     FILE_DOWNLOAD,
     POST_WRITE,
-    POST_DELETE
+    POST_DELETE,
+    ADMIN_NOTICE
 } from '../_actions/types'
 
 export default function (state={}, action){
@@ -77,6 +78,9 @@ export default function (state={}, action){
             break;
         case POST_DELETE:
             return {...state, deleteSuccess : action.payload}
+            break;
+        case ADMIN_NOTICE:
+            return {...state, noticeSuccess : action.payload}
             break;
         default:
             return state;

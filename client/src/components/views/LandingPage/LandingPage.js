@@ -5,6 +5,7 @@ import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
 import Weather from '../Modal/Weather'
+
 import '../../../css/style.css'
 
 function LandingPage(props){
@@ -71,7 +72,7 @@ function LandingPage(props){
 
 
     return(
-        <div>
+        <div style={{zIndex:'2'}}>
             <div id="divCon">
             
             </div>

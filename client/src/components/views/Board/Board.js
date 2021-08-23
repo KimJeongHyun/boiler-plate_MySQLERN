@@ -92,7 +92,7 @@ function Board(props){
     return(
         <div>
             {sessionValue(Session) ? <NavBarUser/> : <NavBar/>}
-                <div className= "ContentContainer" id="ContentContainer" style={{top:"50px"}}>
+                <div className= "ContentContainer" id="ContentContainer" style={{top:"50px",position:'relative',zIndex:'2'}}>
                     <div className="ContentField" style={{textAlign:"center"}}>
                         <h1>{Title}</h1>
                         <table style={{margin:"auto", width:"50%"}}>

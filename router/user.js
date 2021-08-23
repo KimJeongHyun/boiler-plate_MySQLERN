@@ -41,4 +41,30 @@ router.get('/loginInfo',(req,res)=>{
     })
 })
 
+router.post('/api/notice',(req,res)=>{
+    const client = req.session.displayName;
+    if (client=='admin'){
+        const content = req.body.Content;
+        const sql = 'INSERT INTO notice (CONTENT,REGDATE) VALUES(?,NOW())';
+        const idxInit = 'ALTER TABLE notice AUTO_INCREMENT=1;' 
+        conn.getConnection((err,connection)=>{
+            if (err) throw err;
+                const initQuery = connection.query(idxInit, function(err,rows){
+                    if (err) throw err;
+                })
+
+
+            const query = connection.query(sql,[content],(err,rows)=>{
+                if (err) throw err;
+                connection.release();
+                res.json({noticeSuccess:true})
+            })
+        })
+    }else{
+        res.json({noticeSuccess:'AUTHERR'})
+    }
+    
+    
+})
+
 module.exports = router;

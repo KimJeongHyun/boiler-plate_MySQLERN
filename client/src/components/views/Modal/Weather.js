@@ -43,7 +43,7 @@ function Weather(){
 
     useEffect(() =>{
         weatherFetch()
-    },[City])
+    },[City,TempCelcius,Icon])
     
     return (
         <div id='WeatherDiv'>

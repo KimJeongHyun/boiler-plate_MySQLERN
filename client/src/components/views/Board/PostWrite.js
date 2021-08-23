@@ -11,7 +11,6 @@ import { withRouter } from 'react-router-dom';
 function PostWrite(props){
     const [Seen, setSeen] = useState(false);
     const [FileName, setFileName] = useState("");
-    const ref = React.useRef();
     const onSeenHandler = () =>{
         setSeen(!Seen);
     }

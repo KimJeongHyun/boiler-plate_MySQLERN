@@ -21,7 +21,8 @@ import {
     FILE_UPLOAD,
     FILE_DOWNLOAD,
     POST_WRITE,
-    POST_DELETE
+    POST_DELETE,
+    ADMIN_NOTICE
 } from './types';
 
 export function auth(){
@@ -217,6 +218,16 @@ export function postDelete(props){
 
     return {
         type:POST_DELETE,
+        payload: request
+    }
+}
+
+export function adminNotice(dataToSubmit){
+    const request=axios.post('/api/notice',dataToSubmit)
+    .then(response=>response.data);
+
+    return {
+        type:ADMIN_NOTICE,
         payload: request
     }
 }

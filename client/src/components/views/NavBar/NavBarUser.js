@@ -1,13 +1,18 @@
-import React, {useEffect} from 'react'
+import React, {useEffect,useState} from 'react'
 import { BiChalkboard, BiHomeHeart, BiMenuAltLeft, BiSupport, BiClipboard } from "react-icons/bi";
 import { DiReact } from "react-icons/di";
 import { RiLogoutCircleRFill  } from "react-icons/ri";
 import { FaRegUserCircle } from "react-icons/fa";
+import {AiOutlineNotification} from "react-icons/ai"
+import NoticeWrite from '../Modal/AdminNoticeModal'
+
 
 export function NavBarUser(){
-    useEffect(()=>{
-        
-    })
+
+    const [Seen, setSeen] = useState(false);
+    const onSeenHandler = () =>{
+        setSeen(!Seen);
+    }
 
     const menuBtnOnClick = () =>{
         let menuBtn = document.getElementById('menuBtn');
@@ -44,6 +49,10 @@ export function NavBarUser(){
                         <a href="#"><BiSupport/><span id='linkName'>Support</span></a>
                         <span id='tooltip'>Support</span>
                     </li>
+                    <li className="sideBar-item">
+                        <a onClick={onSeenHandler}><AiOutlineNotification/><span id='linkName'>Notice</span></a>
+                        <span id='tooltip'>Notice</span>
+                    </li>
                     <div className="guestContainer">
                         <div className="guestContent" id="guestContent">
                             <a href="/logout" id="functionName"><span id='linkName'>Logout</span><RiLogoutCircleRFill id='linkBtn'/></a>
@@ -52,6 +61,7 @@ export function NavBarUser(){
                         </div> 
                     </div>         
                 </ul>
+                {Seen ? <NoticeWrite toggle={onSeenHandler}/> : null}
             </nav>
          </div>
     )
