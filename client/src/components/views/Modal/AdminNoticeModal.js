@@ -26,7 +26,7 @@ function AdminNoticeModal(props){
         
     }
     return(
-        <div className="modalNotice" style={{zIndex:'2'}}>
+        <div className="modalNotice">
         <div className="modalNotice_content">
             <span className="close" onClick={handleClick}>
                 &times;

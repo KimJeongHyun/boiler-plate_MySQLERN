@@ -49,10 +49,9 @@ router.post('/api/notice',(req,res)=>{
         const idxInit = 'ALTER TABLE notice AUTO_INCREMENT=1;' 
         conn.getConnection((err,connection)=>{
             if (err) throw err;
-                const initQuery = connection.query(idxInit, function(err,rows){
-                    if (err) throw err;
-                })
-
+            const initQuery = connection.query(idxInit, function(err,rows){
+                if (err) throw err;
+            })
 
             const query = connection.query(sql,[content],(err,rows)=>{
                 if (err) throw err;

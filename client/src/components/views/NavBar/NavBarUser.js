@@ -50,8 +50,8 @@ export function NavBarUser(){
                         <span id='tooltip'>Support</span>
                     </li>
                     <li className="sideBar-item">
-                        <a onClick={onSeenHandler}><AiOutlineNotification/><span id='linkName'>Notice</span></a>
-                        <span id='tooltip'>Notice</span>
+                        <a onClick={onSeenHandler}><AiOutlineNotification/><span id='linkName'>Alarm</span></a>
+                        <span id='tooltip'>Alarm</span>
                     </li>
                     <div className="guestContainer">
                         <div className="guestContent" id="guestContent">

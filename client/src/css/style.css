@@ -404,11 +404,15 @@ header{
 }
 
 .modalNotice {
-    position:relative;
+    position: absolute;
     z-index: 1;
     margin-left:100px;
-    width:50%;
-    left:10%;
+    width:60%;
+    min-width: 250px;
+    height:50%;
+    top:10%;
+    left:20%;
+    display:flex;
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.25);
@@ -420,6 +424,7 @@ header{
     top: 20%;
     left: 30%;
     width: 40%;
+    min-width: 180px;
     padding: 20px;
     border-radius: 5px;
     border: 2px solid black;
