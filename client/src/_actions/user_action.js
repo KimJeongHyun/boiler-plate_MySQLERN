@@ -22,7 +22,8 @@ import {
     FILE_DOWNLOAD,
     POST_WRITE,
     POST_DELETE,
-    ADMIN_NOTICE
+    ADMIN_NOTICE,
+    NOTICE_VIEW
 } from './types';
 
 export function auth(){
@@ -228,6 +229,16 @@ export function adminNotice(dataToSubmit){
 
     return {
         type:ADMIN_NOTICE,
+        payload: request
+    }
+}
+
+export function noticeView(){
+    const request=axios.get('/api/noticeView')
+    .then(response=>response.data);
+
+    return {
+        type:NOTICE_VIEW,
         payload: request
     }
 }

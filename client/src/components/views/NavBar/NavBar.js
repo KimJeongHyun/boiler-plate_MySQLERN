@@ -16,7 +16,6 @@ export function NavBar(){
         if (WeatherDiv!=null){
             WeatherDiv.classList.toggle('active');
         }
-        
     }
 
 

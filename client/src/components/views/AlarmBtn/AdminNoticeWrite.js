@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 
-function AdminNoticeModal(props){
+function AdminNoticeWrite(props){
 
     const [Content,setContent] = useState("")
 
@@ -42,7 +42,7 @@ function AdminNoticeModal(props){
     )
 }
 
-export default AdminNoticeModal
+export default AdminNoticeWrite
 
 
 

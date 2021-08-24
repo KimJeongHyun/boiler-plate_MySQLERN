@@ -5,11 +5,12 @@ import ScrollTop from '../TopBtn/ScrollTop'
 import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
 import Weather from '../Modal/Weather'
-import AdminNoticeBtn from '../AlarmBtn/AdminNoticeBtn'
+import AdminNoticeBtn from '../AlarmBtn/AdminNoticeWrite'
 import {AiOutlineNotification} from "react-icons/ai"
 import {GrNotification} from "react-icons/gr"
 
 import '../../../css/style.css'
+import NoticeView from '../AlarmBtn/NoticeView'
 
 function LandingPage(props){
     const [Seen, setSeen] = useState(false);
@@ -85,8 +86,7 @@ function LandingPage(props){
             <div id="divCon">
                 
             </div>
-            
-            {Seen ? <AdminNoticeBtn toggle={onSeenHandler}/> : null}
+            {Session=='admin' ? (Seen ? <AdminNoticeBtn toggle={onSeenHandler}/> : null) : (Seen ? <NoticeView toggle={onSeenHandler}/>:null)}
             <Weather className='weatherCon'/>
         </div>
         
