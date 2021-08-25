@@ -30,7 +30,6 @@ function NoticeView(props){
             const contentRendering = () =>{
                 const result = [];
                 for (let i = 0; i<Length; i++){
-                    console.log(i);
                     result.push(
                         <>
                             {Rows[i].content}

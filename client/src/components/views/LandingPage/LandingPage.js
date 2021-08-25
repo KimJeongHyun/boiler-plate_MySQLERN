@@ -6,25 +6,47 @@ import NavBar from '../NavBar/NavBar'
 import NavBarUser from '../NavBar/NavBarUser'
 import Weather from '../Modal/Weather'
 import AdminNoticeBtn from '../AlarmBtn/AdminNoticeWrite'
-import {AiOutlineNotification} from "react-icons/ai"
+import { VscBellDot } from "react-icons/vsc";
 import {GrNotification} from "react-icons/gr"
-
 import '../../../css/style.css'
 import NoticeView from '../AlarmBtn/NoticeView'
 
 function LandingPage(props){
     const [Seen, setSeen] = useState(false);
     const [Session,setSession] = useState("")
-    
+    const [AlertVar,setAlertVar] = useState(0)
+
     const onSeenHandler = () =>{
         setSeen(!Seen);
+        axios.get('/api/clearNotice')
+        .then(response=>{
+            setAlertVar(0);
+        })
     }
 
-    useEffect(()=>{
-        axios.get('/api/getSession')
-        .then(response=>{
-            setSession(response.data.ID);
-        })
+    useEffect(async ()=>{
+
+        const worker = async () =>{
+            await getSession();
+            await setAlert();
+            await DOMRendering();
+        }
+
+        const getSession = () =>{
+            axios.get('/api/getSession')
+            .then(response=>{
+                setSession(response.data.ID);
+            })
+        }
+
+        const setAlert = () =>{
+            if (Session!='' && Session!=undefined && Session!='admin'){
+                axios.get('/api/noticeView')
+                .then(response=>{
+                    setAlertVar(response.data.alertVar);
+                })
+            }
+        }
 
         const landPageRendering = () =>{
             const result=[];
@@ -33,7 +55,8 @@ function LandingPage(props){
                     <div>
                         
                         <div className="ContentContainer" id="ContentContainer">
-                        <a><GrNotification onClick={onSeenHandler} className='alarmNotice'/></a>
+                            
+                        <a>{AlertVar ? <VscBellDot onClick={onSeenHandler} className='alarmNotice'/> : <GrNotification onClick={onSeenHandler} className='alarmNotice'/>}</a>
                             <div className="ContentField">
                                 <div style={{
                                     display:'flex', flexDirection:'column',
@@ -73,10 +96,13 @@ function LandingPage(props){
             }
             return result;
         }
-        ReactDOM.render(landPageRendering(),document.getElementById('divCon'));
+        
+        const DOMRendering = () =>{
+            ReactDOM.render(landPageRendering(),document.getElementById('divCon'));
+        }
+        worker();
 
-
-    },[Session])
+    },[AlertVar,Session,Seen])
 
     
 

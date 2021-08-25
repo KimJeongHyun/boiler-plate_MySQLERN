@@ -75,13 +75,13 @@ router.post('/api/notice',(req,res)=>{
                     const length = rows.length;
                     for (let i=0; i<length; i++){
                         if (rows[i].ALARM=='none'){
-                            const updateSql = 'UPDATE users SET ALARM=? WHERE ID != "admin"'
+                            const updateSql = 'UPDATE users SET ALARM=?, ALERT=1 WHERE ID != "admin"'
                             connection.query(updateSql,[idx],(err,rows)=>{
                                 if (err) throw err;
                             })
                         }else{
                             let ALARMstr = rows[i].ALARM+','+idx
-                            const updateSql = 'UPDATE users SET ALARM=? WHERE ID != "admin"'
+                            const updateSql = 'UPDATE users SET ALARM=?, ALERT=1 WHERE ID != "admin"'
                             connection.query(updateSql,[ALARMstr],(err,rows)=>{
                                 if (err) throw err;
                                 
@@ -107,26 +107,31 @@ router.post('/api/notice',(req,res)=>{
 })
 
 router.get('/api/noticeView',(req,res)=>{
-    
     conn.getConnection((err,connection)=>{
         let ids=0;
-        const selSql = 'SELECT ALARM FROM users WHERE ID=?'
+        const selSql = 'SELECT ALARM, ALERT FROM users WHERE ID=?'
         let sql = 'SELECT content FROM notice WHERE IDX in '
 
-        const getNoticeQuery = (ids) =>{
-            sql = sql+`(${ids})`
-            connection.query(sql,(err,rows)=>{
-                if (err) throw err;
-                connection.release();
-                res.json({noticeElement:true, rows:rows, length:rows.length})
-            })
+        const getNoticeQuery = (ids, alertVar) =>{
+            sql = sql+`(${ids})`+' ORDER BY REGDATE DESC limit 4'
+            if (ids!='none'){
+                connection.query(sql,(err,rows)=>{
+                    if (err) throw err;
+                    connection.release();
+                    res.json({noticeElement:true, rows:rows, length:rows.length, alertVar:alertVar})
+                })
+            }else{
+                res.json({noticeElement:true,length:0,alertVar:0})
+            }
+            
         }
 
         const selQuery = () =>{
             connection.query(selSql,[req.session.displayName],(err,rows)=>{
                 if (err) throw err;
                 ids=rows[0].ALARM;
-                getNoticeQuery(ids);
+                alertVar = rows[0].ALERT;
+                getNoticeQuery(ids,alertVar);
             })
         }
         
@@ -137,5 +142,17 @@ router.get('/api/noticeView',(req,res)=>{
         worker();
     })
 })
+
+router.get('/api/clearNotice',(req,res)=>{
+    conn.getConnection((err,connection)=>{
+        const sql = 'UPDATE users SET ALERT=0 WHERE ID=?'
+        connection.query(sql,[req.session.displayName],(err,rows)=>{
+            if (err) throw err;
+            connection.release();
+            res.json({clearSuccess:true})
+        })
+    })
+})
+
 
 module.exports = router;
